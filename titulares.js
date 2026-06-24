@@ -26,7 +26,7 @@ window.TITULARES = 👽 Sin señales de OVNIs, pero sí de un Mundial lleno de s
   // }
   //
   // Ejemplo listo para copiar y pegar:
-  // ,{
+  // ,{👽 Sin señales de OVNIs, pero sí de un Mundial lleno de sorpresas
   //   fecha: "Lunes 23 de Junio",
   //   texto: "Argentina le ganó 3-1 a Chile en un partido lleno de gol en el Monumental. Messi abrió el marcador a los 12 minutos.",
   //   fuente: "Central Mundialista"
