@@ -15,7 +15,7 @@
    - Mantené siempre la coma al final de cada bloque
    ============================================================ */
 
-window.TITULARES = [
+window.TITULARES = 👽 Sin señales de OVNIs, pero sí de un Mundial lleno de sorpresas[
 
   // 👽 Sin señales de OVNIs, pero sí de un Mundial lleno de sorpresas
   //
