@@ -21,7 +21,7 @@ window.TITULARES = 👽 Sin señales de OVNIs, pero sí de un Mundial lleno de s
   //
   // ,{
   //   fecha: "Lunes 23 de Junio",
-  //   texto: "Tu noticia acá. Puede ser larga, se adapta sola.",
+  //   texto: "👽 Sin señales de OVNIs, pero sí de un Mundial lleno de sorpresas",
   //   fuente: "Tu nombre o tu canal"
   // }
   //
