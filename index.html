@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="3600">
+  <title>Central Mundialista 2026</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://flagcdn.com">
+</head>
+<body>
+  <div id="app" class="app">
+    <!-- ===================== HEADER ===================== -->
+    <header class="header">
+      <div class="brand">
+        <span class="brand-logo">🏆</span>
+        <span class="brand-name">CENTRAL MUNDIALISTA</span>
+        <span class="brand-year">2026</span>
+      </div>
+      <div class="header-right">
+        <div class="clock" id="clock">--:--</div>
+        <div class="live-badge" id="liveStatus">
+          <span class="live-dot"></span>
+          <span id="liveText">CONECTANDO</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== MAIN GRID ===================== -->
+    <main class="main-grid">
+
+      <!-- Columna izquierda: partido en vivo / próximo -->
+      <section class="col-left">
+        <div class="match-card" id="matchCard">
+          <div class="match-card-header" id="matchCardHeader">
+            <span id="matchStage">CARGANDO...</span>
+          </div>
+          <div class="match-body" id="matchBody">
+            <div class="loading">Cargando datos del Mundial...</div>
+          </div>
+        </div>
+
+        <!-- Resultados recientes -->
+        <div class="recent-card">
+          <div class="card-title">📅 RESULTADOS DE HOY</div>
+          <div class="recent-list" id="recentList">
+            <div class="loading-small">Cargando...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Columna centro: titular + adivinanza -->
+      <section class="col-center">
+        <div class="headline-card">
+          <div class="card-title">📰 TITULAR DEL DÍA</div>
+          <div class="headline-content" id="headlineContent">
+            <div class="loading-small">Cargando titular...</div>
+          </div>
+        </div>
+
+        <div class="trivia-card">
+          <div class="card-title">🤔 ADIVINANZA</div>
+          <div class="trivia-content" id="triviaContent">
+            <div class="loading-small">Cargando...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Columna derecha: tabla de grupos -->
+      <section class="col-right">
+        <div class="standings-card">
+          <div class="card-title">
+            📊 TABLA DE GRUPOS
+            <span class="group-nav" id="groupNav"></span>
+          </div>
+          <div class="standings-list" id="standingsList">
+            <div class="loading-small">Cargando tabla...</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===================== TICKER INFERIOR ===================== -->
+    <footer class="ticker-bar">
+      <div class="ticker-label">🔥 DATO</div>
+      <div class="ticker-track">
+        <div class="ticker-content" id="tickerContent">
+          Cargando curiosidades...
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Datos editables (cargar ANTES de app.js) -->
+  <script src="titulares.js"></script>
+  <script src="preguntas.js"></script>
+  <script src="curiosidades.js"></script>
+  <!-- Lógica principal -->
+  <script src="app.js"></script>
+</body>
+</html>
