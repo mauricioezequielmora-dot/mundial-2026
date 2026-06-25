@@ -2,18 +2,39 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e1a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="screen-orientation" content="landscape">
   <meta http-equiv="refresh" content="3600">
   <title>Central Mundialista 2026</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./style.css">
   <link rel="preconnect" href="https://flagcdn.com">
+  <link rel="preconnect" href="https://worldcup26.ir">
 </head>
 <body>
+  <div class="rotate-device" id="rotateDevice" aria-live="polite">
+    <div class="rotate-device-inner">
+      <strong>GIRÁ EL TELÉFONO</strong>
+      <span>Esta pantalla está preparada para usarse en horizontal.</span>
+    </div>
+  </div>
+
+  <button class="immersive-prompt" id="immersivePrompt" type="button" aria-label="Iniciar pantalla completa">
+    <span class="immersive-title">TOCÁ PARA INICIAR</span>
+    <span class="immersive-subtitle">Pantalla completa · Horizontal · Pantalla activa</span>
+    <span class="immersive-browser-note" id="browserNote">Después instalala desde Chrome para abrirla sin barra de dirección.</span>
+  </button>
+
   <div id="app" class="app">
-    <!-- ===================== HEADER ===================== -->
     <header class="header">
       <div class="brand">
-        <span class="brand-logo">🏆</span>
+        <span class="brand-logo">⚽</span>
         <span class="brand-name">CENTRAL MUNDIALISTA</span>
         <span class="brand-year">2026</span>
       </div>
@@ -26,10 +47,7 @@
       </div>
     </header>
 
-    <!-- ===================== MAIN GRID ===================== -->
     <main class="main-grid">
-
-      <!-- Columna izquierda: partido en vivo / próximo -->
       <section class="col-left">
         <div class="match-card" id="matchCard">
           <div class="match-card-header" id="matchCardHeader">
@@ -40,37 +58,34 @@
           </div>
         </div>
 
-        <!-- Resultados recientes -->
         <div class="recent-card">
-          <div class="card-title">📅 RESULTADOS DE HOY</div>
+          <div class="card-title">RESULTADOS RECIENTES</div>
           <div class="recent-list" id="recentList">
             <div class="loading-small">Cargando...</div>
           </div>
         </div>
       </section>
 
-      <!-- Columna centro: titular + adivinanza -->
       <section class="col-center">
         <div class="headline-card">
-          <div class="card-title">📰 TITULAR DEL DÍA</div>
+          <div class="card-title">TITULAR DEL DÍA</div>
           <div class="headline-content" id="headlineContent">
             <div class="loading-small">Cargando titular...</div>
           </div>
         </div>
 
         <div class="trivia-card">
-          <div class="card-title">🤔 ADIVINANZA</div>
+          <div class="card-title">ADIVINANZA</div>
           <div class="trivia-content" id="triviaContent">
             <div class="loading-small">Cargando...</div>
           </div>
         </div>
       </section>
 
-      <!-- Columna derecha: tabla de grupos -->
       <section class="col-right">
         <div class="standings-card">
           <div class="card-title">
-            📊 TABLA DE GRUPOS
+            TABLA DE GRUPOS
             <span class="group-nav" id="groupNav"></span>
           </div>
           <div class="standings-list" id="standingsList">
@@ -78,25 +93,20 @@
           </div>
         </div>
       </section>
-
     </main>
 
-    <!-- ===================== TICKER INFERIOR ===================== -->
     <footer class="ticker-bar">
-      <div class="ticker-label">🔥 DATO</div>
+      <div class="ticker-label">DATO</div>
       <div class="ticker-track">
-        <div class="ticker-content" id="tickerContent">
-          Cargando curiosidades...
-        </div>
+        <div class="ticker-content" id="tickerContent">Cargando curiosidades...</div>
       </div>
     </footer>
   </div>
 
-  <!-- Datos editables (cargar ANTES de app.js) -->
-  <script src="titulares.js"></script>
-  <script src="preguntas.js"></script>
-  <script src="curiosidades.js"></script>
-  <!-- Lógica principal -->
-  <script src="app.js"></script>
+  <script src="./titulares.js"></script>
+  <script src="./preguntas.js"></script>
+  <script src="./curiosidades.js"></script>
+  <script src="./app.js"></script>
+  <script src="./pwa.js"></script>
 </body>
 </html>

@@ -1,0 +1,33 @@
+CENTRAL MUNDIALISTA 2026 — ARCHIVOS LISTOS PARA GITHUB
+
+ESTADO COMPROBADO EL 25/06/2026
+- El repositorio público todavía conserva la versión original.
+- No tiene manifest.webmanifest, sw.js, pwa.js ni la carpeta icons.
+- titulares.js está roto por un texto pegado fuera de las comillas.
+- app.js, preguntas.js y curiosidades.js se conservaron sin cambios.
+
+CÓMO SUBIR
+1. Descomprimí este ZIP.
+2. Dentro de la carpeta extraída, seleccioná todos los archivos y la carpeta icons.
+3. En GitHub: Add file > Upload files.
+4. Arrastrá los elementos seleccionados.
+5. Antes de confirmar, comprobá que index.html aparezca en la raíz y que icons sea una carpeta de la raíz.
+6. Confirmá con Commit changes.
+
+ESTRUCTURA CORRECTA
+/index.html
+/style.css
+/app.js
+/titulares.js
+/preguntas.js
+/curiosidades.js
+/manifest.webmanifest
+/sw.js
+/pwa.js
+/icons/icon-192.png
+/icons/icon-512.png
+
+DESPUÉS
+- Esperá la publicación de GitHub Pages.
+- Abrí la web en la computadora y forzá la recarga con Ctrl+F5.
+- En el celular, eliminá el acceso directo anterior e instalá nuevamente la aplicación desde Chrome.

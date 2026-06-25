@@ -685,3 +685,439 @@ html, body {
   from { opacity: 0.4; }
   to { opacity: 1; }
 }
+
+/* ============================================================
+   MODO MÓVIL HORIZONTAL / PWA
+   Ajustado para pantallas 20:9 como Samsung Galaxy A04s.
+   ============================================================ */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@supports (height: 100dvh) {
+  html,
+  body,
+  .app {
+    height: 100dvh;
+  }
+}
+
+body {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+.rotate-device {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #0a0e1a;
+  color: #fff;
+  text-align: center;
+}
+
+.rotate-device-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rotate-device strong {
+  color: var(--gold);
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+.rotate-device span {
+  color: var(--text-dim);
+  font-size: 15px;
+}
+
+.immersive-prompt {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: rgba(10, 14, 26, 0.97);
+  color: #fff;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.immersive-prompt.is-hidden {
+  display: none;
+}
+
+.immersive-title {
+  color: var(--gold);
+  font-size: clamp(22px, 5vw, 42px);
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.immersive-subtitle {
+  font-size: clamp(12px, 2.3vw, 20px);
+  font-weight: 700;
+}
+
+.immersive-browser-note {
+  max-width: 680px;
+  padding: 0 20px;
+  color: var(--text-dim);
+  font-size: clamp(10px, 1.8vw, 15px);
+}
+
+@media (orientation: portrait) {
+  .rotate-device {
+    display: flex;
+  }
+
+  .immersive-prompt,
+  .app {
+    visibility: hidden;
+  }
+}
+
+/* Vista compacta: el navegador del A04s suele exponer aprox. 800 × 360 CSS px. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .app {
+    grid-template-rows: 34px minmax(0, 1fr) 32px;
+  }
+
+  .header {
+    padding: 0 9px;
+    border-bottom-width: 1px;
+  }
+
+  .brand {
+    gap: 5px;
+  }
+
+  .brand-logo {
+    font-size: 13px;
+  }
+
+  .brand-name,
+  .brand-year,
+  .clock {
+    font-size: 11px;
+  }
+
+  .brand-name {
+    letter-spacing: 0.8px;
+  }
+
+  .header-right {
+    gap: 7px;
+  }
+
+  .clock,
+  .live-badge {
+    padding: 3px 6px;
+    border-radius: 4px;
+  }
+
+  .live-badge {
+    gap: 4px;
+    font-size: 8px;
+    letter-spacing: 0.4px;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .main-grid {
+    grid-template-columns: 1.38fr 1fr 1.05fr;
+    gap: 5px;
+    padding: 5px;
+  }
+
+  .col-left,
+  .col-center,
+  .col-right {
+    gap: 5px;
+  }
+
+  .match-card,
+  .recent-card,
+  .headline-card,
+  .trivia-card,
+  .standings-card {
+    padding: 5px 7px;
+    border-radius: 6px;
+  }
+
+  .card-title {
+    margin-bottom: 4px;
+    font-size: 8px;
+    letter-spacing: 0.6px;
+  }
+
+  .match-card-header {
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+    font-size: 8px;
+    letter-spacing: 0.4px;
+  }
+
+  .match-card-header .live-min {
+    font-size: 9px;
+  }
+
+  .match-teams,
+  .live-scoreboard {
+    gap: 7px;
+  }
+
+  .team,
+  .live-team {
+    gap: 3px;
+    padding: 2px;
+  }
+
+  .team img,
+  .live-team img {
+    width: 38px;
+    height: 25px;
+    padding: 1px;
+  }
+
+  .team-name,
+  .lt-name {
+    font-size: 9px;
+  }
+
+  .score {
+    gap: 5px;
+    font-size: 28px;
+  }
+
+  .live-score {
+    gap: 6px;
+    font-size: 32px;
+  }
+
+  .match-meta,
+  .scorers,
+  .match-stadium,
+  .stat-pill,
+  .scorer-item {
+    font-size: 7px;
+  }
+
+  .match-meta {
+    margin-top: 5px;
+  }
+
+  .scorers {
+    margin-top: 3px;
+    line-height: 1.2;
+  }
+
+  .countdown {
+    margin-top: 3px;
+    font-size: 13px;
+  }
+
+  .recent-card {
+    max-height: 75px;
+  }
+
+  .recent-list {
+    gap: 2px;
+  }
+
+  .recent-item {
+    gap: 3px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 7px;
+  }
+
+  .recent-item img {
+    width: 13px;
+    height: 9px;
+  }
+
+  .recent-item .r-team {
+    gap: 2px;
+  }
+
+  .recent-item .r-score {
+    padding: 1px 4px;
+    font-size: 8px;
+  }
+
+  .headline-content {
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .headline-content .h-date {
+    margin-bottom: 4px;
+    font-size: 7px;
+    letter-spacing: 0.4px;
+  }
+
+  .headline-content .h-source {
+    margin-top: 4px;
+    font-size: 7px;
+  }
+
+  .headline-content .h-placeholder {
+    font-size: 9px;
+    line-height: 1.25;
+  }
+
+  .trivia-content {
+    font-size: 8px;
+    line-height: 1.2;
+  }
+
+  .trivia-question {
+    margin-bottom: 4px;
+  }
+
+  .trivia-options {
+    gap: 2px;
+  }
+
+  .trivia-opt {
+    gap: 4px;
+    padding: 3px 5px;
+    border-radius: 3px;
+    font-size: 7px;
+  }
+
+  .trivia-opt .letter {
+    width: 10px;
+  }
+
+  .trivia-hint {
+    margin-top: 3px;
+    font-size: 6px;
+  }
+
+  .group-nav {
+    font-size: 7px;
+  }
+
+  .standings-list {
+    gap: 2px;
+  }
+
+  .stand-row {
+    grid-template-columns: 14px 15px minmax(0, 1fr) 14px 17px 21px;
+    gap: 2px;
+    padding: 3px 2px;
+    border-radius: 3px;
+    font-size: 7px;
+  }
+
+  .stand-row img {
+    width: 13px;
+    height: 9px;
+  }
+
+  .stand-header {
+    padding: 2px;
+    font-size: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  .ticker-label {
+    padding: 0 8px;
+    font-size: 8px;
+    letter-spacing: 0.8px;
+  }
+
+  .ticker-content {
+    font-size: 10px;
+  }
+
+  .live-wrap {
+    gap: 4px;
+  }
+
+  .live-banner,
+  .next-banner {
+    margin-bottom: 3px;
+    padding: 3px 5px;
+    border-radius: 3px;
+    font-size: 7px;
+    letter-spacing: 0.4px;
+  }
+
+  .live-pulse {
+    width: 6px;
+    height: 6px;
+  }
+
+  .live-scoreboard {
+    padding: 2px 0;
+  }
+
+  .live-scorers {
+    gap: 4px;
+  }
+
+  .scorer-col {
+    padding: 4px;
+    border-radius: 4px;
+  }
+
+  .scorer-team {
+    margin-bottom: 2px;
+    font-size: 7px;
+  }
+
+  .scorer-item {
+    padding: 1px 0;
+  }
+
+  .match-stadium {
+    padding: 3px;
+    border-radius: 3px;
+  }
+
+  .live-stats-mini {
+    gap: 3px;
+  }
+
+  .stat-pill {
+    padding: 2px 5px;
+  }
+
+  .loading,
+  .loading-small,
+  .error {
+    font-size: 8px;
+  }
+}
+
+@media (display-mode: fullscreen), (display-mode: standalone) {
+  body {
+    background: #0a0e1a;
+  }
+}
