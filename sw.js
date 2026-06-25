@@ -1,4 +1,4 @@
-const CACHE_NAME = "central-mundialista-v2";
+const CACHE_NAME = "central-mundialista-v3";
 const APP_SHELL = [
   "./",
   "./index.html",

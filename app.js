@@ -4,6 +4,7 @@
 
 const API = "https://worldcup26.ir/get";
 const REFRESH_MS = 60000;       // refresca datos cada 60s
+const LIVE_ROTATION_MS = 60000; // cambia de partido en vivo cada 60s
 const ARG_TZ = "America/Argentina/Buenos_Aires";
 const ARG_TEAM_ID = "37";
 
@@ -16,6 +17,7 @@ let state = {
   groupOrder: ["A","B","C","D","E","F","G","H","I","J","K","L"],
   groupIndex: 0,
   lastUpdate: null,
+  liveMatchIndex: 0,  // partido en vivo que se muestra cuando hay varios
 };
 
 // ============================================================
@@ -87,8 +89,27 @@ function parseGameDate(str) {
 // ============================================================
 // DETECCIÓN DE PARTIDO EN VIVO / PRÓXIMO
 // ============================================================
+function getLiveMatches() {
+  return state.games
+    .filter(g => g.isLive)
+    .sort((a, b) => parseInt(a.id, 10) - parseInt(b.id, 10));
+}
+
 function getLiveMatch() {
-  return state.games.find(g => g.isLive);
+  const liveMatches = getLiveMatches();
+  if (liveMatches.length === 0) return null;
+  state.liveMatchIndex = state.liveMatchIndex % liveMatches.length;
+  return liveMatches[state.liveMatchIndex];
+}
+
+function rotateLiveMatch() {
+  const liveMatches = getLiveMatches();
+  if (liveMatches.length <= 1) {
+    state.liveMatchIndex = 0;
+    return;
+  }
+  state.liveMatchIndex = (state.liveMatchIndex + 1) % liveMatches.length;
+  renderMatch();
 }
 
 function getNextMatch() {
@@ -138,9 +159,14 @@ function renderLiveMatch(live, header, body, card) {
   const away = state.teams[live.away_team_id];
   const stadium = state.stadiums[live.stadium_id];
 
+  const liveMatches = getLiveMatches();
+  const rotationLabel = liveMatches.length > 1
+    ? ` · ${state.liveMatchIndex + 1}/${liveMatches.length}`
+    : "";
+
   header.innerHTML = `
     <span>${live.group ? "GRUPO " + live.group : (live.type || "").toUpperCase()}</span>
-    <span class="live-min live-blink">● EN VIVO</span>
+    <span class="live-min live-blink">● EN VIVO${rotationLabel}</span>
   `;
 
   const stadiumInfo = stadium ? `
@@ -177,7 +203,6 @@ function renderLiveMatch(live, header, body, card) {
       <div class="live-stats-mini">
         <div class="stat-pill">⚽ ${parseInt(live.home_score_num) + parseInt(live.away_score_num)} goles</div>
         <div class="stat-pill">🏆 ${live.group ? "Grupo " + live.group : "Mundial"}</div>
-        <div class="stat-pill">📊 Datos via API</div>
       </div>
     </div>
   `;
@@ -507,6 +532,7 @@ async function init() {
   // Bucle de actualización
   setInterval(renderClock, 1000);          // reloj cada segundo
   setInterval(loadData, REFRESH_MS);       // datos cada 60s
+  setInterval(rotateLiveMatch, LIVE_ROTATION_MS); // alternar partidos en vivo cada 60s
   setInterval(rotateGroup, 8000);          // rotar grupo cada 8s
   setInterval(renderTrivia, 45000);        // rotar adivinanza cada 45s
   setInterval(() => {
