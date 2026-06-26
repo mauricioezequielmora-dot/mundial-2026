@@ -8,7 +8,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="screen-orientation" content="landscape">
-  <meta http-equiv="refresh" content="3600">
   <title>Central Mundialista 2026</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icons/icon-192.png" sizes="192x192">
@@ -30,6 +29,17 @@
     <span class="immersive-subtitle">Pantalla completa · Horizontal · Pantalla activa</span>
     <span class="immersive-browser-note" id="browserNote">Después instalala desde Chrome para abrirla sin barra de dirección.</span>
   </button>
+
+  <div class="goal-alert" id="goalAlert" role="status" aria-live="assertive">
+    <div class="goal-word">¡GOL!</div>
+    <div class="goal-team" id="goalTeam">Nuevo gol</div>
+    <div class="goal-score" id="goalScore">0 - 0</div>
+  </div>
+
+  <div class="subscribe-alert" id="subscribeAlert" role="status" aria-live="polite">
+    <span class="subscribe-icon">🔔</span>
+    <span><strong>SEGUÍ TODO EL MUNDIAL</strong><br>Suscribite al canal para no perderte ningún resultado.</span>
+  </div>
 
   <div id="app" class="app">
     <header class="header">

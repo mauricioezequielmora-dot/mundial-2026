@@ -1,0 +1,44 @@
+CENTRAL MUNDIALISTA 2026 — CÓMO SUBIR ESTA VERSIÓN
+
+1. Guardá una copia del repositorio actual:
+   - Entrá al repositorio.
+   - Botón Code.
+   - Download ZIP.
+
+2. Descomprimí este ZIP en la computadora.
+
+3. Abrí el repositorio:
+   https://github.com/mauricioezequielmora-dot/mundial-2026
+
+4. Elegí Add file > Upload files.
+
+5. Seleccioná TODO el contenido de esta carpeta descomprimida.
+   Debés subir los archivos sueltos y la carpeta icons.
+   No subas el ZIP cerrado y no subas una carpeta contenedora adicional.
+
+6. Verificá que en la raíz aparezcan:
+   index.html
+   style.css
+   app.js
+   pwa.js
+   sw.js
+   manifest.webmanifest
+   titulares.js
+   preguntas.js
+   curiosidades.js
+   README.md
+   icons/
+
+7. Mensaje recomendado del commit:
+   Versión resistente para transmisión móvil
+
+8. Confirmá directamente en la rama main.
+
+9. Entrá en Actions y esperá la tilde verde.
+
+10. Abrí la página en la computadora:
+    https://mauricioezequielmora-dot.github.io/mundial-2026/
+
+11. Presioná Ctrl + F5.
+
+12. En el teléfono, eliminá la instalación anterior de la PWA y volvé a instalarla desde Chrome para evitar que conserve una versión vieja.

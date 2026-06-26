@@ -2,6 +2,7 @@
   const prompt = document.getElementById("immersivePrompt");
   const browserNote = document.getElementById("browserNote");
   let wakeLock = null;
+  let reloadingForUpdate = false;
 
   const isInstalled = () =>
     window.matchMedia("(display-mode: standalone)").matches ||
@@ -11,6 +12,7 @@
   async function requestWakeLock() {
     if (!("wakeLock" in navigator) || document.visibilityState !== "visible") return;
     try {
+      if (wakeLock) return;
       wakeLock = await navigator.wakeLock.request("screen");
       wakeLock.addEventListener("release", () => {
         wakeLock = null;
@@ -60,10 +62,23 @@
   });
 
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").catch(error => {
+    window.addEventListener("load", async () => {
+      try {
+        const registration = await navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
+        registration.update().catch(() => {});
+
+        setInterval(() => {
+          registration.update().catch(() => {});
+        }, 30 * 60 * 1000);
+      } catch (error) {
         console.error("No se pudo registrar el service worker:", error);
-      });
+      }
+    });
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (reloadingForUpdate) return;
+      reloadingForUpdate = true;
+      window.location.reload();
     });
   }
 })();

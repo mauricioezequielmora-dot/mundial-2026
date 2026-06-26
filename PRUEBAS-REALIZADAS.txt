@@ -1,0 +1,10 @@
+PRUEBAS REALIZADAS SOBRE ESTA ENTREGA
+
+- Validación de sintaxis de app.js con Node.js: correcta.
+- Validación de sintaxis de pwa.js con Node.js: correcta.
+- Validación de sintaxis de sw.js con Node.js: correcta.
+- Comprobación de IDs HTML necesarios: sin IDs faltantes ni duplicados.
+- Ejecución simulada de la carga inicial con datos de prueba: correcta.
+- Render simulado de partido en vivo, tabla y estado: correcto.
+
+No se puede confirmar desde este entorno la estabilidad física del Samsung A04s, el comportamiento de una aplicación de transmisión concreta ni la disponibilidad futura de la API externa. Por eso se incluyen pruebas de 45 minutos y 2 horas antes del vivo público.

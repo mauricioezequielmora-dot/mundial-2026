@@ -1,4 +1,4 @@
-const CACHE_NAME = "central-mundialista-v3";
+const CACHE_NAME = "central-mundialista-v4-resistente";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -36,13 +36,10 @@ self.addEventListener("fetch", event => {
   if (request.method !== "GET") return;
 
   const url = new URL(request.url);
-
-  // La API y otros recursos externos siempre se solicitan por internet.
   if (url.origin !== self.location.origin) return;
 
-  // Prioriza la versión más nueva. Si no hay conexión, usa la copia guardada.
   event.respondWith(
-    fetch(request)
+    fetch(request, { cache: "no-store" })
       .then(response => {
         if (response.ok) {
           const copy = response.clone();
@@ -51,7 +48,7 @@ self.addEventListener("fetch", event => {
         return response;
       })
       .catch(async () => {
-        const cached = await caches.match(request);
+        const cached = await caches.match(request, { ignoreSearch: true });
         if (cached) return cached;
         if (request.mode === "navigate") return caches.match("./index.html");
         return new Response("Sin conexión", { status: 503, statusText: "Offline" });

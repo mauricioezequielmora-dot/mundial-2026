@@ -1,71 +1,27 @@
-# 🏆 Central Mundialista 2026
+# Central Mundialista 2026
 
-App web para stream 24/7 con datos en vivo del Mundial 2026.
-Pensada para transmitirse desde un celular a YouTube.
+Panel web horizontal pensado para transmitir resultados, grupos, titulares, curiosidades y preguntas del Mundial 2026 desde un teléfono.
 
-## Cómo funciona
+## Características
 
-- Lee datos de la API gratuita `worldcup26.ir` (partidos, scores, tabla, estadios)
-- Se actualiza sola cada 60 segundos
-- 100% estática (HTML + CSS + JS), no necesita servidor
-- Hosteada gratis en GitHub Pages → nunca se cae
+- PWA instalable y preparada para orientación horizontal.
+- Alterna partidos simultáneos cada 60 segundos.
+- Actualiza los datos cada 60 segundos.
+- Conserva la última información válida en el teléfono.
+- Reintenta automáticamente si la API o la conexión fallan.
+- Muestra el estado de actualización y la hora del último dato válido.
+- Alerta visual de gol cuando detecta un cambio nuevo en un partido en vivo.
+- Mensaje discreto de suscripción cada 10 minutos.
+- Caché controlada para recibir versiones nuevas sin quedar atrapado en archivos antiguos.
 
-## Estructura
+## Límites
 
-```
-index.html        ← la página principal (NO editar)
-style.css         ← el diseño (NO editar)
-app.js            ← la lógica (NO editar)
-titulares.js      ← TUS titulares (EDITÁS acá)
-preguntas.js      ← adivinanzas (editás cuando quieras)
-curiosidades.js   ← datos curiosos (editás cuando quieras)
-.nojekyll         ← archivo vacío, necesario para GitHub Pages
-```
+El panel depende de la conexión a internet, GitHub Pages y la API externa `worldcup26.ir`. Si una fuente externa deja de funcionar o cambia su formato, el panel puede conservar el último dato válido, pero no puede inventar información ni reparar esa fuente por sí solo.
 
-## Subir a GitHub Pages (una sola vez)
+## Archivos editables
 
-1. Entrá a https://github.com/new
-2. Repository name: `mundial-2026`
-3. Elegí **Public**
-4. Tildá **"Add a README file"**
-5. Click **Create repository**
-6. En el repo, hacé click en **"Add file"** → **"Upload files"**
-7. Arrastrá TODOS los archivos de esta carpeta
-8. Click **"Commit changes"**
-9. Andá a **Settings** → **Pages** (menú izquierdo)
-10. En "Source", elegí **Deploy from a branch**
-11. Branch: `main` / Folder: `/ (root)`
-12. Click **Save**
-13. Esperá 1-2 minutos
-14. Tu URL será: `https://TU-USUARIO.github.io/mundial-2026/`
+- `titulares.js`: titulares manuales.
+- `preguntas.js`: preguntas y opciones.
+- `curiosidades.js`: datos del ticker inferior.
 
-## Cambiar el titular (cuando quieras)
-
-1. Entrá a tu repo en GitHub
-2. Hacé click en `titulares.js`
-3. Click en el lápiz ✏️ (arriba a la derecha del archivo)
-4. Agregá un titular así (manteniendo la coma):
-
-```javascript
-,{
-  fecha: "Lunes 23 de Junio",
-  texto: "Argentina le ganó 3-1 a Chile...",
-  fuente: "Central Mundialista"
-}
-```
-
-5. Click **"Commit changes"** (verde, abajo)
-6. En 1-2 minutos aparece en el stream
-
-## Editar adivinanzas / curiosidades
-
-Igual que titulares, pero en `preguntas.js` o `curiosidades.js`.
-
-## Abrir desde el celu
-
-Una vez publicado, abrí en el celu:
-```
-https://TU-USUARIO.github.io/mundial-2026/
-```
-
-Agregalo a la pantalla principal del celu para acceder rápido.
+No edites `app.js`, `pwa.js`, `sw.js`, `index.html` ni `style.css` salvo que vayas a actualizar el sistema completo.

@@ -1,76 +1,297 @@
 /* ============================================================
-   CENTRAL MUNDIALISTA 2026 - Lógica principal
+   CENTRAL MUNDIALISTA 2026 - Versión resistente para transmisión
    ============================================================ */
 
 const API = "https://worldcup26.ir/get";
-const REFRESH_MS = 60000;       // refresca datos cada 60s
-const LIVE_ROTATION_MS = 60000; // cambia de partido en vivo cada 60s
+const REFRESH_MS = 60000;
+const LIVE_ROTATION_MS = 60000;
+const REQUEST_TIMEOUT_MS = 15000;
+const STALE_WARNING_MS = 3 * 60 * 1000;
+const WATCHDOG_RELOAD_MS = 12 * 60 * 1000;
+const CACHE_KEY = "central-mundialista-datos-v2";
 const ARG_TZ = "America/Argentina/Buenos_Aires";
 const ARG_TEAM_ID = "37";
 
-// Estado global
+let refreshTimer = null;
+let retryAttempt = 0;
+let initializedScores = false;
+let freshBaselineReady = false;
+let reloadIssued = false;
+let lastHeartbeat = Date.now();
+let subscribeTimer = null;
+
 let state = {
   games: [],
-  teams: {},          // id -> team
-  groups: {},         // nombre -> standings
+  teams: {},
+  groups: {},
+  stadiums: {},
   currentGroup: "A",
   groupOrder: ["A","B","C","D","E","F","G","H","I","J","K","L"],
   groupIndex: 0,
   lastUpdate: null,
-  liveMatchIndex: 0,  // partido en vivo que se muestra cuando hay varios
+  lastAttempt: null,
+  liveMatchIndex: 0,
+  isLoading: false,
+  lastScores: {},
+  usingCachedData: false,
 };
 
-// ============================================================
-// CARGA DE DATOS DE LA API
-// ============================================================
+function safeArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function endpointHasData(name, payload) {
+  if (!payload || typeof payload !== "object") return false;
+  if (name === "games") return Array.isArray(payload.games) && payload.games.length > 0;
+  if (name === "teams") return Array.isArray(payload.teams) && payload.teams.length > 0;
+  if (name === "groups") return Array.isArray(payload.groups) && payload.groups.length > 0;
+  if (name === "stadiums") return Array.isArray(payload.stadiums) && payload.stadiums.length > 0;
+  return false;
+}
+
 async function fetchJSON(url) {
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`HTTP ${res.status} en ${url}`);
-  return res.json();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  try {
+    const separator = url.includes("?") ? "&" : "?";
+    const res = await fetch(`${url}${separator}_=${Date.now()}`, {
+      cache: "no-store",
+      signal: controller.signal,
+      headers: { "Accept": "application/json" },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function readCachedPayloads() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return null;
+    return parsed;
+  } catch (error) {
+    console.warn("No se pudo leer la copia local:", error);
+    return null;
+  }
+}
+
+function writeCachedPayloads(payloads, savedAt = Date.now()) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ payloads, savedAt }));
+  } catch (error) {
+    console.warn("No se pudo guardar la copia local:", error);
+  }
+}
+
+function normalizeAndApply(payloads, { fromCache = false, updateTime = null } = {}) {
+  const gamesRes = payloads.games || {};
+  const teamsRes = payloads.teams || {};
+  const groupsRes = payloads.groups || {};
+  const stadiumsRes = payloads.stadiums || {};
+
+  const teamsMap = {};
+  safeArray(teamsRes.teams).forEach(team => {
+    if (team && team.id != null) teamsMap[String(team.id)] = team;
+  });
+
+  const stadiumsMap = {};
+  safeArray(stadiumsRes.stadiums).forEach(stadium => {
+    if (stadium && stadium.id != null) stadiumsMap[String(stadium.id)] = stadium;
+  });
+
+  const groupsMap = {};
+  safeArray(groupsRes.groups).forEach(group => {
+    if (group && group.name != null) groupsMap[String(group.name)] = group;
+  });
+
+  const normalizedGames = safeArray(gamesRes.games).map(game => ({
+    ...game,
+    home_team_id: String(game.home_team_id ?? ""),
+    away_team_id: String(game.away_team_id ?? ""),
+    stadium_id: String(game.stadium_id ?? ""),
+    home_score_num: Number.parseInt(game.home_score, 10) || 0,
+    away_score_num: Number.parseInt(game.away_score, 10) || 0,
+    date: parseGameDate(game.local_date),
+    isLive: game.time_elapsed === "live" || (
+      game.time_elapsed &&
+      game.time_elapsed !== "finished" &&
+      game.time_elapsed !== "notstarted" &&
+      game.time_elapsed !== "NS" &&
+      !Number.isNaN(Number.parseInt(game.time_elapsed, 10))
+    ),
+    isFinished: game.finished === "TRUE" || game.finished === true,
+  }));
+
+  if (normalizedGames.length === 0) {
+    throw new Error("La respuesta no contiene partidos");
+  }
+
+  const previousScores = { ...state.lastScores };
+  const hadPreviousGames = state.games.length > 0;
+
+  state.games = normalizedGames;
+  if (Object.keys(teamsMap).length) state.teams = teamsMap;
+  if (Object.keys(groupsMap).length) state.groups = groupsMap;
+  if (Object.keys(stadiumsMap).length) state.stadiums = stadiumsMap;
+  state.usingCachedData = fromCache;
+
+  if (updateTime) state.lastUpdate = new Date(updateTime);
+
+  detectGoals(previousScores, hadPreviousGames && initializedScores && freshBaselineReady && !fromCache);
+  state.lastScores = buildScoreSnapshot(state.games);
+  initializedScores = true;
+  if (!fromCache) freshBaselineReady = true;
+  renderAll();
+}
+
+function buildScoreSnapshot(games) {
+  const snapshot = {};
+  games.forEach(game => {
+    snapshot[String(game.id)] = {
+      home: game.home_score_num,
+      away: game.away_score_num,
+    };
+  });
+  return snapshot;
+}
+
+function detectGoals(previousScores, allowAlert) {
+  if (!allowAlert) return;
+
+  for (const game of state.games) {
+    if (!game.isLive) continue;
+    const previous = previousScores[String(game.id)];
+    if (!previous) continue;
+
+    const homeDelta = game.home_score_num - previous.home;
+    const awayDelta = game.away_score_num - previous.away;
+    if (homeDelta <= 0 && awayDelta <= 0) continue;
+
+    const scoringTeamId = homeDelta > 0 ? game.home_team_id : game.away_team_id;
+    const scoringTeam = state.teams[scoringTeamId];
+    showGoalAlert(
+      scoringTeam?.name_en || "Nuevo gol",
+      `${game.home_score_num} - ${game.away_score_num}`
+    );
+    break;
+  }
 }
 
 async function loadData() {
+  if (state.isLoading) return;
+  state.isLoading = true;
+  state.lastAttempt = new Date();
+  lastHeartbeat = Date.now();
+
+  const names = ["games", "teams", "groups", "stadiums"];
+  const requests = names.map(name => fetchJSON(`${API}/${name}`));
+  const cachedContainer = readCachedPayloads();
+  const cachedPayloads = cachedContainer?.payloads || {};
+
   try {
-    const [gamesRes, teamsRes, groupsRes, stadiumsRes] = await Promise.all([
-      fetchJSON(`${API}/games`),
-      fetchJSON(`${API}/teams`),
-      fetchJSON(`${API}/groups`),
-      fetchJSON(`${API}/stadiums`),
-    ]);
+    const results = await Promise.allSettled(requests);
+    const merged = {};
+    let freshCount = 0;
 
-    // Indexar equipos por id
-    const teamsMap = {};
-    (teamsRes.teams || []).forEach(t => { teamsMap[t.id] = t; });
-    state.teams = teamsMap;
+    results.forEach((result, index) => {
+      const name = names[index];
+      if (result.status === "fulfilled" && endpointHasData(name, result.value)) {
+        merged[name] = result.value;
+        freshCount += 1;
+      } else if (endpointHasData(name, cachedPayloads[name])) {
+        merged[name] = cachedPayloads[name];
+      }
+    });
 
-    // Indexar estadios por id
-    const stadiumsMap = {};
-    (stadiumsRes.stadiums || []).forEach(s => { stadiumsMap[s.id] = s; });
-    state.stadiums = stadiumsMap;
+    if (!endpointHasData("games", merged.games)) {
+      throw new Error("No hay datos de partidos disponibles");
+    }
 
-    // Indexar grupos por nombre
-    const groupsMap = {};
-    (groupsRes.groups || []).forEach(g => { groupsMap[g.name] = g; });
-    state.groups = groupsMap;
+    const now = Date.now();
+    const completelyFresh = freshCount === names.length;
+    const hasFreshGames = results[0].status === "fulfilled" && endpointHasData("games", results[0].value);
+    const effectiveUpdateTime = hasFreshGames ? now : (cachedContainer?.savedAt || state.lastUpdate?.getTime() || now);
 
-    // Normalizar juegos
-    state.games = (gamesRes.games || []).map(g => ({
-      ...g,
-      home_score_num: parseInt(g.home_score, 10) || 0,
-      away_score_num: parseInt(g.away_score, 10) || 0,
-      date: parseGameDate(g.local_date),
-      isLive: g.time_elapsed === "live" || (g.time_elapsed && g.time_elapsed !== "finished" && g.time_elapsed !== "notstarted" && g.time_elapsed !== "NS" && !isNaN(parseInt(g.time_elapsed, 10))),
-      isFinished: g.finished === "TRUE" || g.finished === true,
-    }));
+    normalizeAndApply(merged, {
+      fromCache: !hasFreshGames,
+      updateTime: effectiveUpdateTime,
+    });
 
-    state.lastUpdate = new Date();
-    setLiveStatus("ok", "ACTUALIZADO");
-    renderAll();
-  } catch (err) {
-    console.error("Error cargando datos:", err);
-    setLiveStatus("error", "SIN CONEXIÓN");
-    // reintentamos rápido
+    if (freshCount > 0) {
+      writeCachedPayloads(merged, effectiveUpdateTime);
+    }
+
+    retryAttempt = 0;
+    updateConnectionStatus(completelyFresh ? "fresh" : (hasFreshGames ? "partial" : "cached"));
+    scheduleNextLoad(REFRESH_MS);
+  } catch (error) {
+    console.error("Error cargando datos:", error);
+
+    if (state.games.length === 0 && endpointHasData("games", cachedPayloads.games)) {
+      try {
+        normalizeAndApply(cachedPayloads, {
+          fromCache: true,
+          updateTime: cachedContainer?.savedAt || Date.now(),
+        });
+      } catch (cacheError) {
+        console.error("La copia local también falló:", cacheError);
+      }
+    }
+
+    retryAttempt += 1;
+    updateConnectionStatus(state.games.length ? "cached" : "offline");
+    const retryDelay = Math.min(REFRESH_MS, 10000 * Math.pow(2, Math.min(retryAttempt - 1, 3)));
+    scheduleNextLoad(retryDelay);
+  } finally {
+    state.isLoading = false;
+    lastHeartbeat = Date.now();
   }
+}
+
+function scheduleNextLoad(delay) {
+  clearTimeout(refreshTimer);
+  refreshTimer = setTimeout(loadData, delay);
+}
+
+function restoreLocalData() {
+  const cached = readCachedPayloads();
+  if (!cached?.payloads || !endpointHasData("games", cached.payloads.games)) return false;
+  try {
+    normalizeAndApply(cached.payloads, {
+      fromCache: true,
+      updateTime: cached.savedAt || Date.now(),
+    });
+    updateConnectionStatus("cached");
+    return true;
+  } catch (error) {
+    console.warn("No se pudo restaurar la copia local:", error);
+    return false;
+  }
+}
+
+function showGoalAlert(teamName, score) {
+  const overlay = document.getElementById("goalAlert");
+  const team = document.getElementById("goalTeam");
+  const scoreEl = document.getElementById("goalScore");
+  if (!overlay || !team || !scoreEl) return;
+
+  team.textContent = teamName;
+  scoreEl.textContent = score;
+  overlay.classList.add("show");
+  clearTimeout(showGoalAlert.timer);
+  showGoalAlert.timer = setTimeout(() => overlay.classList.remove("show"), 8000);
+}
+
+function showSubscribeAlert() {
+  const overlay = document.getElementById("subscribeAlert");
+  if (!overlay) return;
+  overlay.classList.add("show");
+  clearTimeout(showSubscribeAlert.timer);
+  showSubscribeAlert.timer = setTimeout(() => overlay.classList.remove("show"), 12000);
 }
 
 // La API da fechas tipo "06/11/2026 13:00" (MM/DD/YYYY HH:MM)
@@ -177,7 +398,7 @@ function renderLiveMatch(live, header, body, card) {
   body.innerHTML = `
     <div class="live-wrap fade-update">
       <div class="live-banner">
-        <span class="live-pulse"></span> TRANSMISIÓN EN VIVO · FASE DE GRUPOS
+        <span class="live-pulse"></span> RESULTADOS EN VIVO · FASE DE GRUPOS
       </div>
 
       <div class="live-scoreboard">
@@ -265,7 +486,7 @@ function renderNextMatch(next, header, body, card) {
         <span class="stage">${matchDate}</span>
       </div>
       ${stadiumInfo}
-      <div class="countdown">QUEDATE QUE EMPIEZA PRONTO</div>
+      <div class="countdown" id="nextCountdown">${next.date ? renderCountdown(next.date) : "QUEDATE QUE EMPIEZA PRONTO"}</div>
     </div>
   `;
   card.classList.remove("live-border");
@@ -485,22 +706,63 @@ function renderTicker() {
 function renderClock() {
   const now = new Date();
   const opts = { hour: "2-digit", minute: "2-digit", timeZone: ARG_TZ, hour12: false };
-  const t = now.toLocaleTimeString("es-AR", opts);
-  const dOpts = { weekday: "short", day: "numeric", month: "short", timeZone: ARG_TZ };
-  const d = now.toLocaleDateString("es-AR", dOpts);
-  document.getElementById("clock").textContent = `${d.toUpperCase()} ${t}`;
+  const time = now.toLocaleTimeString("es-AR", opts);
+  const dateOpts = { weekday: "short", day: "numeric", month: "short", timeZone: ARG_TZ };
+  const date = now.toLocaleDateString("es-AR", dateOpts);
+  const clock = document.getElementById("clock");
+  if (clock) clock.textContent = `${date.toUpperCase()} ${time}`;
+}
+
+function formatUpdateTime(date) {
+  if (!date) return "";
+  return date.toLocaleTimeString("es-AR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: ARG_TZ,
+    hour12: false,
+  });
 }
 
 function setLiveStatus(type, text) {
   const badge = document.getElementById("liveStatus");
   const txt = document.getElementById("liveText");
+  if (!badge || !txt) return;
+
   txt.textContent = text;
-  if (type === "live") {
-    badge.classList.add("live");
-  } else if (type === "error") {
-    badge.classList.remove("live");
+  badge.classList.remove("live", "warning", "error", "loading");
+  badge.classList.add(type);
+}
+
+function updateConnectionStatus(mode = null) {
+  const age = state.lastUpdate ? Date.now() - state.lastUpdate.getTime() : Infinity;
+  const live = getLiveMatches().length > 0;
+
+  if (!navigator.onLine || mode === "offline") {
+    const suffix = state.lastUpdate ? ` · ${formatUpdateTime(state.lastUpdate)}` : "";
+    setLiveStatus("error", `SIN CONEXIÓN${suffix}`);
+    return;
+  }
+
+  if (state.isLoading && !state.lastUpdate) {
+    setLiveStatus("loading", "CONECTANDO");
+    return;
+  }
+
+  if (mode === "cached" || age > STALE_WARNING_MS) {
+    const minutes = Number.isFinite(age) ? Math.max(1, Math.floor(age / 60000)) : 0;
+    setLiveStatus("warning", minutes ? `DATOS ${minutes} MIN` : "REINTENTANDO");
+    return;
+  }
+
+  if (mode === "partial") {
+    setLiveStatus("warning", `ACTUALIZACIÓN PARCIAL · ${formatUpdateTime(state.lastUpdate)}`);
+    return;
+  }
+
+  if (live) {
+    setLiveStatus("live", `EN VIVO · ${formatUpdateTime(state.lastUpdate)}`);
   } else {
-    badge.classList.remove("live");
+    setLiveStatus("ok", `ACTUALIZADO · ${formatUpdateTime(state.lastUpdate)}`);
   }
 }
 
@@ -510,9 +772,6 @@ function formatDateLong(date) {
   return date.toLocaleDateString("es-AR", opts);
 }
 
-// ============================================================
-// RENDER GLOBAL
-// ============================================================
 function renderAll() {
   renderMatch();
   renderRecent();
@@ -522,28 +781,67 @@ function renderAll() {
   renderTicker();
 }
 
-// ============================================================
-// INICIALIZACIÓN
-// ============================================================
+function watchdogTick() {
+  lastHeartbeat = Date.now();
+  updateConnectionStatus();
+
+  if (document.visibilityState !== "visible") return;
+  if (!state.lastAttempt) return;
+
+  const sinceSuccess = state.lastUpdate ? Date.now() - state.lastUpdate.getTime() : Infinity;
+  const shouldReload = sinceSuccess > WATCHDOG_RELOAD_MS && retryAttempt >= 4;
+
+  if (shouldReload && !reloadIssued) {
+    reloadIssued = true;
+    location.reload();
+  }
+}
+
 async function init() {
   renderClock();
   setLiveStatus("loading", "CONECTANDO");
+  restoreLocalData();
   await loadData();
-  // Bucle de actualización
-  setInterval(renderClock, 1000);          // reloj cada segundo
-  setInterval(loadData, REFRESH_MS);       // datos cada 60s
-  setInterval(rotateLiveMatch, LIVE_ROTATION_MS); // alternar partidos en vivo cada 60s
-  setInterval(rotateGroup, 8000);          // rotar grupo cada 8s
-  setInterval(renderTrivia, 45000);        // rotar adivinanza cada 45s
+
+  setInterval(renderClock, 1000);
+  setInterval(rotateLiveMatch, LIVE_ROTATION_MS);
+  setInterval(rotateGroup, 8000);
+  setInterval(renderTrivia, 45000);
   setInterval(() => {
-    // Re-render del partido cada 5s para refrescar el marcador
     renderMatch();
+    const countdown = document.getElementById("nextCountdown");
+    const next = getNextMatch();
+    if (countdown && next?.date) countdown.textContent = renderCountdown(next.date);
   }, 5000);
-  // Setear a "EN VIVO" si hay partido live
-  setInterval(() => {
-    setLiveStatus(getLiveMatch() ? "live" : "ok",
-                  getLiveMatch() ? "EN VIVO" : "ACTUALIZADO");
-  }, 5000);
+  setInterval(watchdogTick, 30000);
+
+  subscribeTimer = setInterval(showSubscribeAlert, 10 * 60 * 1000);
+  setTimeout(showSubscribeAlert, 4 * 60 * 1000);
+
+  window.addEventListener("online", () => {
+    retryAttempt = 0;
+    setLiveStatus("loading", "RECONECTANDO");
+    loadData();
+  });
+
+  window.addEventListener("offline", () => updateConnectionStatus("offline"));
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      reloadIssued = false;
+      loadData();
+    }
+  });
 }
+
+window.addEventListener("error", event => {
+  console.error("Error global:", event.error || event.message);
+  updateConnectionStatus(state.games.length ? "cached" : "offline");
+});
+
+window.addEventListener("unhandledrejection", event => {
+  console.error("Promesa rechazada:", event.reason);
+  updateConnectionStatus(state.games.length ? "cached" : "offline");
+});
 
 window.addEventListener("DOMContentLoaded", init);
