@@ -20,9 +20,3 @@ Versión completa para emitir desde un Samsung en horizontal y administrar el co
 El panel remoto necesita un proyecto Firebase propio. Seguí `INSTRUCCIONES-PANEL-REMOTO.txt`, completá `firebase-config.js` y publicá las reglas de `firebase-rules.json`.
 
 La señal principal continúa funcionando aunque Firebase todavía no esté configurado; en ese caso conserva el panel local anterior.
-
-
-## Corrección de horarios
-- Horarios eliminatorios fijados en hora argentina (UTC-3).
-- Contador independiente de la zona horaria del navegador.
-- Caché PWA actualizada para evitar conservar la versión anterior.

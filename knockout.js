@@ -10,6 +10,7 @@
   "use strict";
 
   const ROTATION_MS = 20000;
+  const ARG_TIME_ZONE = "America/Argentina/Buenos_Aires";
   let fixtureIndex = 0;
   let rotationTimer = null;
 
@@ -20,8 +21,7 @@
       away: "Canadá",
       homeAliases: ["South Africa", "Sudáfrica"],
       awayAliases: ["Canada", "Canadá"],
-      dateArgentina: "2026-06-28",
-      timeArgentina: "16:00",
+      kickoffUtc: "2026-06-28T19:00:00Z",
       venue: "Inglewood, California",
       next: "Países Bajos o Marruecos"
     },
@@ -31,8 +31,7 @@
       away: "Japón",
       homeAliases: ["Brazil", "Brasil"],
       awayAliases: ["Japan", "Japón"],
-      dateArgentina: "2026-06-29",
-      timeArgentina: "14:00",
+      kickoffUtc: "2026-06-29T17:00:00Z",
       venue: "Houston",
       next: "Costa de Marfil o Noruega"
     },
@@ -42,8 +41,7 @@
       away: "Paraguay",
       homeAliases: ["Germany", "Alemania"],
       awayAliases: ["Paraguay"],
-      dateArgentina: "2026-06-29",
-      timeArgentina: "17:30",
+      kickoffUtc: "2026-06-29T20:30:00Z",
       venue: "Foxborough, Massachusetts",
       next: "Francia o Suecia"
     },
@@ -53,8 +51,7 @@
       away: "Marruecos",
       homeAliases: ["Netherlands", "Países Bajos", "Holland"],
       awayAliases: ["Morocco", "Marruecos"],
-      dateArgentina: "2026-06-29",
-      timeArgentina: "22:00",
+      kickoffUtc: "2026-06-30T01:00:00Z",
       venue: "Guadalupe, México",
       next: "Sudáfrica o Canadá"
     },
@@ -64,8 +61,7 @@
       away: "Noruega",
       homeAliases: ["Ivory Coast", "Côte d'Ivoire", "Cote d'Ivoire", "Costa de Marfil"],
       awayAliases: ["Norway", "Noruega"],
-      dateArgentina: "2026-06-30",
-      timeArgentina: "14:00",
+      kickoffUtc: "2026-06-30T17:00:00Z",
       venue: "Arlington, Texas",
       next: "Brasil o Japón"
     },
@@ -75,8 +71,7 @@
       away: "Suecia",
       homeAliases: ["France", "Francia"],
       awayAliases: ["Sweden", "Suecia"],
-      dateArgentina: "2026-06-30",
-      timeArgentina: "18:00",
+      kickoffUtc: "2026-06-30T21:00:00Z",
       venue: "East Rutherford, Nueva Jersey",
       next: "Alemania o Paraguay"
     },
@@ -86,8 +81,7 @@
       away: "Ecuador",
       homeAliases: ["Mexico", "México"],
       awayAliases: ["Ecuador"],
-      dateArgentina: "2026-06-30",
-      timeArgentina: "22:00",
+      kickoffUtc: "2026-07-01T01:00:00Z",
       venue: "Ciudad de México",
       next: "Inglaterra o RD Congo"
     },
@@ -97,8 +91,7 @@
       away: "RD Congo",
       homeAliases: ["England", "Inglaterra"],
       awayAliases: ["DR Congo", "Congo DR", "RD Congo", "Democratic Republic of the Congo"],
-      dateArgentina: "2026-07-01",
-      timeArgentina: "13:00",
+      kickoffUtc: "2026-07-01T16:00:00Z",
       venue: "Atlanta",
       next: "México o Ecuador"
     },
@@ -108,8 +101,7 @@
       away: "Senegal",
       homeAliases: ["Belgium", "Bélgica"],
       awayAliases: ["Senegal"],
-      dateArgentina: "2026-07-01",
-      timeArgentina: "17:00",
+      kickoffUtc: "2026-07-01T20:00:00Z",
       venue: "Seattle",
       next: "Estados Unidos o Bosnia y Herzegovina"
     },
@@ -119,8 +111,7 @@
       away: "Bosnia y Herzegovina",
       homeAliases: ["USA", "United States", "United States of America", "Estados Unidos"],
       awayAliases: ["Bosnia and Herzegovina", "Bosnia-Herzegovina", "Bosnia y Herzegovina"],
-      dateArgentina: "2026-07-01",
-      timeArgentina: "21:00",
+      kickoffUtc: "2026-07-02T00:00:00Z",
       venue: "Santa Clara, California",
       next: "Bélgica o Senegal"
     },
@@ -130,8 +121,7 @@
       away: "Austria",
       homeAliases: ["Spain", "España"],
       awayAliases: ["Austria"],
-      dateArgentina: "2026-07-02",
-      timeArgentina: "16:00",
+      kickoffUtc: "2026-07-02T19:00:00Z",
       venue: "Inglewood, California",
       next: "Portugal o Croacia"
     },
@@ -141,8 +131,7 @@
       away: "Croacia",
       homeAliases: ["Portugal"],
       awayAliases: ["Croatia", "Croacia"],
-      dateArgentina: "2026-07-02",
-      timeArgentina: "20:00",
+      kickoffUtc: "2026-07-02T23:00:00Z",
       venue: "Toronto",
       next: "España o Austria"
     },
@@ -152,8 +141,7 @@
       away: "Argelia",
       homeAliases: ["Switzerland", "Suiza"],
       awayAliases: ["Algeria", "Argelia"],
-      dateArgentina: "2026-07-03",
-      timeArgentina: "00:00",
+      kickoffUtc: "2026-07-03T03:00:00Z",
       venue: "Vancouver",
       next: "Colombia o Ghana"
     },
@@ -163,8 +151,7 @@
       away: "Egipto",
       homeAliases: ["Australia"],
       awayAliases: ["Egypt", "Egipto"],
-      dateArgentina: "2026-07-03",
-      timeArgentina: "15:00",
+      kickoffUtc: "2026-07-03T18:00:00Z",
       venue: "Arlington, Texas",
       next: "Argentina o Cabo Verde"
     },
@@ -174,8 +161,7 @@
       away: "Cabo Verde",
       homeAliases: ["Argentina"],
       awayAliases: ["Cape Verde", "Cabo Verde", "Cabo Verde Islands"],
-      dateArgentina: "2026-07-03",
-      timeArgentina: "19:00",
+      kickoffUtc: "2026-07-03T22:00:00Z",
       venue: "Miami Gardens, Florida",
       next: "Australia o Egipto",
       argentina: true
@@ -186,31 +172,17 @@
       away: "Ghana",
       homeAliases: ["Colombia"],
       awayAliases: ["Ghana"],
-      dateArgentina: "2026-07-03",
-      timeArgentina: "22:30",
+      kickoffUtc: "2026-07-04T01:30:00Z",
       venue: "Kansas City",
       next: "Suiza o Argelia"
     }
   ];
 
-  // Las banderas de Camino a la Copa son recursos locales y fijos.
-  // No se toman desde la API porque algunas respuestas pueden devolver una URL incorrecta.
-  const FLAG_ASSET = {
-    "Sudáfrica": "za", "Canadá": "ca", "Brasil": "br", "Japón": "jp",
-    "Alemania": "de", "Paraguay": "py", "Países Bajos": "nl", "Marruecos": "ma",
-    "Costa de Marfil": "ci", "Noruega": "no", "Francia": "fr", "Suecia": "se",
-    "México": "mx", "Ecuador": "ec", "Inglaterra": "eng", "RD Congo": "cd",
-    "Bélgica": "be", "Senegal": "sn", "Estados Unidos": "us", "Bosnia y Herzegovina": "ba",
-    "España": "es", "Austria": "at", "Portugal": "pt", "Croacia": "hr",
-    "Suiza": "ch", "Argelia": "dz", "Australia": "au", "Egipto": "eg",
-    "Argentina": "ar", "Cabo Verde": "cv", "Colombia": "co", "Ghana": "gh"
-  };
-
   const FLAG_FALLBACK = {
     "Sudáfrica": "🇿🇦", "Canadá": "🇨🇦", "Brasil": "🇧🇷", "Japón": "🇯🇵",
     "Alemania": "🇩🇪", "Paraguay": "🇵🇾", "Países Bajos": "🇳🇱", "Marruecos": "🇲🇦",
     "Costa de Marfil": "🇨🇮", "Noruega": "🇳🇴", "Francia": "🇫🇷", "Suecia": "🇸🇪",
-    "México": "🇲🇽", "Ecuador": "🇪🇨", "Inglaterra": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "RD Congo": "🇨🇩",
+    "México": "🇲🇽", "Ecuador": "🇪🇨", "Inglaterra": "🏴", "RD Congo": "🇨🇩",
     "Bélgica": "🇧🇪", "Senegal": "🇸🇳", "Estados Unidos": "🇺🇸", "Bosnia y Herzegovina": "🇧🇦",
     "España": "🇪🇸", "Austria": "🇦🇹", "Portugal": "🇵🇹", "Croacia": "🇭🇷",
     "Suiza": "🇨🇭", "Argelia": "🇩🇿", "Australia": "🇦🇺", "Egipto": "🇪🇬",
@@ -286,34 +258,31 @@
     return null;
   }
 
-  // Los horarios se guardan como fecha y hora de Argentina, no como hora de la sede.
-  // El cálculo manual UTC-3 evita que Android, Chrome o la zona del dispositivo
-  // conviertan accidentalmente el horario estadounidense como si fuera local.
-  function argentinaKickoffMs(fixture) {
-    const [year, month, day] = fixture.dateArgentina.split("-").map(Number);
-    const [hour, minute] = fixture.timeArgentina.split(":").map(Number);
-    return Date.UTC(year, month - 1, day, hour + 3, minute, 0, 0);
+  function formatArgentinaDate(iso) {
+    const date = new Date(iso);
+    const day = date.toLocaleDateString("es-AR", {
+      timeZone: ARG_TIME_ZONE,
+      weekday: "short",
+      day: "2-digit",
+      month: "2-digit"
+    }).replace(",", "").toUpperCase();
+    const time = date.toLocaleTimeString("es-AR", {
+      timeZone: ARG_TIME_ZONE,
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    });
+    return `${day} · ${time} HS`;
   }
 
-  function formatArgentinaDate(fixture) {
-    const [year, month, day] = fixture.dateArgentina.split("-").map(Number);
-    const weekday = new Intl.DateTimeFormat("es-AR", {
-      timeZone: "UTC",
-      weekday: "short"
-    }).format(new Date(Date.UTC(year, month - 1, day, 12, 0, 0)))
-      .replace(".", "")
-      .toUpperCase();
-    return `${weekday} ${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")} · ${fixture.timeArgentina} HS`;
-  }
-
-  function countdownText(fixture) {
-    const difference = argentinaKickoffMs(fixture) - Date.now();
+  function countdownText(iso) {
+    const difference = new Date(iso).getTime() - Date.now();
     if (difference <= 0) return "A LA ESPERA DE ACTUALIZACIÓN";
     const days = Math.floor(difference / 86400000);
     const hours = Math.floor((difference % 86400000) / 3600000);
     const minutes = Math.floor((difference % 3600000) / 60000);
-    if (days > 0) return `FALTAN ${days} D · ${hours} H · ${minutes} MIN`;
-    if (hours > 0) return `FALTAN ${hours} H · ${minutes} MIN`;
+    if (days > 0) return `FALTAN ${days}D ${hours}H ${minutes}M`;
+    if (hours > 0) return `FALTAN ${hours}H ${minutes}M`;
     return `FALTAN ${Math.max(1, minutes)} MIN`;
   }
 
@@ -325,11 +294,11 @@
     return `${displayName}: ${record.pts} pts · ${gf}-${ga} goles · Grupo ${record.groupName}`;
   }
 
-  function flagMarkup(_team, displayName) {
-    const code = FLAG_ASSET[displayName];
-    const fallback = FLAG_FALLBACK[displayName] || "⚽";
-    if (!code) return `<span class="ko-flag-emoji">${fallback}</span>`;
-    return `<img class="ko-flag" src="./flags/${code}.png" alt="Bandera de ${displayName}" onerror="this.outerHTML='<span class=\'ko-flag-emoji\'>${fallback}</span>'">`;
+  function flagMarkup(team, displayName) {
+    if (team?.flag) {
+      return `<img class="ko-flag" src="${team.flag}" alt="" onerror="this.replaceWith(document.createTextNode('${FLAG_FALLBACK[displayName] || '⚽'}'))">`;
+    }
+    return `<span class="ko-flag-emoji">${FLAG_FALLBACK[displayName] || "⚽"}</span>`;
   }
 
   function scoreInFixtureOrder(apiMatch, homeTeam, awayTeam) {
@@ -362,7 +331,7 @@
 
     return {
       className: "upcoming",
-      label: formatArgentinaDate(fixture),
+      label: formatArgentinaDate(fixture.kickoffUtc),
       score: "VS"
     };
   }
@@ -379,8 +348,8 @@
     if (live) return live.index;
 
     const upcoming = enriched
-      .filter(item => !item.game?.isFinished && argentinaKickoffMs(item.fixture) > Date.now())
-      .sort((a, b) => argentinaKickoffMs(a.fixture) - argentinaKickoffMs(b.fixture))[0];
+      .filter(item => !item.game?.isFinished && new Date(item.fixture.kickoffUtc).getTime() > Date.now())
+      .sort((a, b) => new Date(a.fixture.kickoffUtc) - new Date(b.fixture.kickoffUtc))[0];
     return upcoming ? upcoming.index : -1;
   }
 
@@ -418,7 +387,7 @@
         </div>
 
         <div class="ko-venue">📍 ${fixture.venue} · HORA ARGENTINA</div>
-        ${status.className === "upcoming" ? `<div class="ko-countdown">${countdownText(fixture)}</div>` : ""}
+        ${status.className === "upcoming" ? `<div class="ko-countdown">${countdownText(fixture.kickoffUtc)}</div>` : ""}
 
         <div class="ko-data-title">DATOS DE FASE DE GRUPOS</div>
         <div class="ko-data-line">${teamRecordLine(homeTeam, fixture.home)}</div>
