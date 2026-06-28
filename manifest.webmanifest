@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Central Mundialista 2026",
   "short_name": "Mundial 2026",
-  "description": "Panel horizontal con resultados, grupos, titulares y datos del Mundial 2026.",
+  "description": "Central horizontal con resultados, grupos, noticias, curiosidades, música y boletines locales.",
   "lang": "es-AR",
   "dir": "ltr",
   "start_url": "./?modo=pwa",

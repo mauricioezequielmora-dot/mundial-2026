@@ -1,10 +1,13 @@
-PRUEBAS REALIZADAS SOBRE ESTA ENTREGA
+COMPROBACIONES DEL PAQUETE
 
-- Validación de sintaxis de app.js con Node.js: correcta.
-- Validación de sintaxis de pwa.js con Node.js: correcta.
-- Validación de sintaxis de sw.js con Node.js: correcta.
-- Comprobación de IDs HTML necesarios: sin IDs faltantes ni duplicados.
-- Ejecución simulada de la carga inicial con datos de prueba: correcta.
-- Render simulado de partido en vivo, tabla y estado: correcto.
+- Sintaxis validada en app.js, studio.js, pwa.js, sw.js y archivos de contenido.
+- Rutas de scripts, CSS, manifest, iconos y música comprobadas.
+- No hay identificadores HTML duplicados.
+- Estructura preparada para 800 x 360 CSS px en horizontal.
+- Archivo de música validado: MP3 estéreo, 72 segundos, 128 kbps.
+- Caché PWA actualizada para incluir studio.js y la música.
 
-No se puede confirmar desde este entorno la estabilidad física del Samsung A04s, el comportamiento de una aplicación de transmisión concreta ni la disponibilidad futura de la API externa. Por eso se incluyen pruebas de 45 minutos y 2 horas antes del vivo público.
+PENDIENTE DE PRUEBA FÍSICA
+- Captura de audio interno de la aplicación elegida para transmitir.
+- Temperatura y estabilidad durante varias horas en el Samsung A04s.
+- Comportamiento real de la API durante los partidos.

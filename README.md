@@ -1,27 +1,23 @@
 # Central Mundialista 2026
 
-Panel web horizontal pensado para transmitir resultados, grupos, titulares, curiosidades y preguntas del Mundial 2026 desde un teléfono.
+PWA horizontal para transmitir desde un teléfono una central de resultados del Mundial.
 
-## Características
+## Incluye
 
-- PWA instalable y preparada para orientación horizontal.
-- Alterna partidos simultáneos cada 60 segundos.
-- Actualiza los datos cada 60 segundos.
-- Conserva la última información válida en el teléfono.
-- Reintenta automáticamente si la API o la conexión fallan.
-- Muestra el estado de actualización y la hora del último dato válido.
-- Alerta visual de gol cuando detecta un cambio nuevo en un partido en vivo.
-- Mensaje discreto de suscripción cada 10 minutos.
-- Caché controlada para recibir versiones nuevas sin quedar atrapado en archivos antiguos.
+- Resultados y grupos desde la API configurada en `app.js`.
+- Alternancia de partidos simultáneos cada 60 segundos.
+- Recuperación con últimos datos válidos y reintentos automáticos.
+- Señal central rotativa: partido destacado, noticias, tendencias, clasificación, trivia, chat y alias.
+- Panel local accesible manteniendo presionado el nombre de la central durante 3 segundos.
+- Música instrumental original incluida.
+- Carga local de música propia y boletín MP3 generado mediante texto a voz.
+- Configuración y audios persistentes en el teléfono.
+- Alias de apoyo: `labamdariver.nx`.
 
-## Límites
+## Archivos diarios
 
-El panel depende de la conexión a internet, GitHub Pages y la API externa `worldcup26.ir`. Si una fuente externa deja de funcionar o cambia su formato, el panel puede conservar el último dato válido, pero no puede inventar información ni reparar esa fuente por sí solo.
+No es necesario modificar GitHub todos los días. El partido destacado, noticias, tendencias, pregunta y audios se cargan desde el panel del teléfono.
 
-## Archivos editables
+## Aclaración
 
-- `titulares.js`: titulares manuales.
-- `preguntas.js`: preguntas y opciones.
-- `curiosidades.js`: datos del ticker inferior.
-
-No edites `app.js`, `pwa.js`, `sw.js`, `index.html` ni `style.css` salvo que vayas a actualizar el sistema completo.
+La central muestra resultados y estadísticas. No transmite imágenes ni audio de los partidos.

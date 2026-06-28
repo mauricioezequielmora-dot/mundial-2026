@@ -1,32 +1,18 @@
-/* ============================================================
-   DATOS CURIOSOS - Barra inferior que rota todo el tiempo
-   ============================================================
-   Rotan en loop infinito. ¡Cuanto más, mejor!
-   Podés poner también mensajes del canal, saludos a seguidores,
-   recordatorios, etc.
-   ============================================================ */
-
+/* Datos breves y estables para la barra inferior. */
 window.CURIOSIDADES = [
-  "El Mundial 2026 es el primero con 48 selecciones, el más grande de la historia",
-  "Argentina y River: el club que más jugadores aportó a la Selección en Mundiales",
-  "El gol más rápido en un Mundial fue de Hakan Şükür en 11 segundos (2002)",
-  "El estadio Azteca de México es el único que vio dos finales mundialistas",
-  "Pelé ganó 3 Mundiales: algo que ningún otro jugador igualó",
-  "El promedio de goles por partido más alto fue en 1954: 5.38 por encuentro",
-  "El jugador más joven en jugar un Mundial tenía solo 17 años: Norman Whiteside",
-  "Maradona jugó su primer Mundial a los 21, en España 1982",
-  "El Mundial más visto fue el de 2022: más de 5 mil millones de espectadores",
-  "El trofeo de la Copa del Mundo pesa 6.1 kg y es de oro de 18 quilates",
-  "Italia fue el primer campeón mundial, en 1930",
-  "Solo 8 selecciones ganaron un Mundial en toda la historia",
-  "Argentina fue finalista en 3 de los últimos 5 Mundiales",
-
-  // Mensajes del canal - importan para engagement
-  "¡Suscribite al canal para no perderte ningún partido!",
-  "Dejá tu país en el chat · ¿Quién va a ganar el Mundial?",
-  "Stream 24/7 desde Merlo, Argentina 🇦🇷",
-  "Si te gusta el contenido, compartí el stream con tus amigos",
-
-  // Agregá más:
-  // "Tu dato curioso acá",
+  "El Mundial 2026 es el primero con 48 selecciones y 104 partidos",
+  "Canadá, México y Estados Unidos comparten la organización del Mundial 2026",
+  "México es el primer país que recibe por tercera vez una Copa Mundial masculina",
+  "El formato 2026 comenzó con 12 grupos de cuatro selecciones",
+  "Los dos primeros de cada grupo y los ocho mejores terceros avanzan a la ronda de 32",
+  "Uruguay ganó la primera Copa Mundial, disputada en 1930",
+  "Brasil es la selección con más títulos mundiales masculinos: cinco",
+  "Miroslav Klose es el máximo goleador histórico del Mundial masculino con 16 goles",
+  "Pelé es el único futbolista que ganó tres Copas Mundiales masculinas",
+  "Hakan Şükür marcó el gol más rápido de la historia del Mundial: a los 11 segundos",
+  "Just Fontaine hizo 13 goles en 1958, récord para una sola edición",
+  "Argentina fue campeona mundial en 1978, 1986 y 2022",
+  "Dejá tu pronóstico en el chat y compartí el vivo con otro fanático",
+  "Esta central muestra resultados y estadísticas; no transmite imágenes de los partidos",
+  "Apoyo voluntario al proyecto: alias labamdariver.nx"
 ];

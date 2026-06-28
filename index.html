@@ -13,7 +13,6 @@
   <link rel="icon" href="./icons/icon-192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <link rel="stylesheet" href="./style.css">
-  <link rel="preconnect" href="https://flagcdn.com">
   <link rel="preconnect" href="https://worldcup26.ir">
 </head>
 <body>
@@ -26,8 +25,8 @@
 
   <button class="immersive-prompt" id="immersivePrompt" type="button" aria-label="Iniciar pantalla completa">
     <span class="immersive-title">TOCÁ PARA INICIAR</span>
-    <span class="immersive-subtitle">Pantalla completa · Horizontal · Pantalla activa</span>
-    <span class="immersive-browser-note" id="browserNote">Después instalala desde Chrome para abrirla sin barra de dirección.</span>
+    <span class="immersive-subtitle">Pantalla completa · Horizontal · Pantalla activa · Música</span>
+    <span class="immersive-browser-note" id="browserNote">Instalala desde Chrome para abrirla sin barra de dirección.</span>
   </button>
 
   <div class="goal-alert" id="goalAlert" role="status" aria-live="assertive">
@@ -41,14 +40,17 @@
     <span><strong>SEGUÍ TODO EL MUNDIAL</strong><br>Suscribite al canal para no perderte ningún resultado.</span>
   </div>
 
+  <div id="studioToast" class="studio-toast" role="status" aria-live="polite"></div>
+
   <div id="app" class="app">
     <header class="header">
-      <div class="brand">
+      <div class="brand" id="brandAdminTrigger" title="Mantené presionado para configurar">
         <span class="brand-logo">⚽</span>
         <span class="brand-name">CENTRAL MUNDIALISTA</span>
         <span class="brand-year">2026</span>
       </div>
       <div class="header-right">
+        <div class="audio-chip" id="audioChip" aria-label="Estado del audio">♫ FONDO</div>
         <div class="clock" id="clock">--:--</div>
         <div class="live-badge" id="liveStatus">
           <span class="live-dot"></span>
@@ -77,18 +79,21 @@
       </section>
 
       <section class="col-center">
-        <div class="headline-card">
-          <div class="card-title">TITULAR DEL DÍA</div>
-          <div class="headline-content" id="headlineContent">
-            <div class="loading-small">Cargando titular...</div>
+        <div class="broadcast-card" id="broadcastCard">
+          <div class="card-title broadcast-card-title">
+            <span id="broadcastSection">RADAR MUNDIAL</span>
+            <span class="broadcast-counter" id="broadcastCounter">1/1</span>
           </div>
+          <div class="broadcast-content" id="broadcastContent">
+            <div class="loading-small">Preparando señal automática...</div>
+          </div>
+          <div class="broadcast-progress"><span id="broadcastProgress"></span></div>
         </div>
 
-        <div class="trivia-card">
-          <div class="card-title">ADIVINANZA</div>
-          <div class="trivia-content" id="triviaContent">
-            <div class="loading-small">Cargando...</div>
-          </div>
+        <!-- Compatibilidad con la versión anterior: app.js actualiza estos nodos sin mostrarlos. -->
+        <div class="legacy-hidden" aria-hidden="true">
+          <div id="headlineContent"></div>
+          <div id="triviaContent"></div>
         </div>
       </section>
 
@@ -113,10 +118,134 @@
     </footer>
   </div>
 
+  <aside class="studio-panel" id="studioPanel" aria-hidden="true">
+    <div class="studio-panel-inner">
+      <header class="studio-header">
+        <div>
+          <strong>CONTROL DE LA CENTRAL</strong>
+          <span>Los cambios se guardan solamente en este teléfono.</span>
+        </div>
+        <button id="studioClose" class="studio-close" type="button" aria-label="Cerrar">×</button>
+      </header>
+
+      <div class="studio-scroll">
+        <section class="studio-section">
+          <h2>Contenido del día</h2>
+          <label>Partido destacado
+            <input id="cfgFeaturedMatch" type="text" maxlength="90" placeholder="Ej.: Argentina vs rival · 23:00">
+          </label>
+          <label>Pregunta para el chat
+            <input id="cfgDailyQuestion" type="text" maxlength="120" placeholder="Ej.: ¿Cómo termina el partido?">
+          </label>
+        </section>
+
+        <section class="studio-section">
+          <h2>Noticias verificadas</h2>
+          <p class="studio-help">Escribí un resumen propio y la fuente. No pegues artículos completos.</p>
+          <div class="news-editor" data-news="0">
+            <textarea id="cfgNewsText0" rows="2" maxlength="190" placeholder="Noticia 1"></textarea>
+            <div class="studio-inline">
+              <input id="cfgNewsSource0" type="text" maxlength="50" placeholder="Fuente: FIFA, AFA, Reuters...">
+              <input id="cfgNewsTime0" type="text" maxlength="12" placeholder="Hora opcional">
+            </div>
+          </div>
+          <div class="news-editor" data-news="1">
+            <textarea id="cfgNewsText1" rows="2" maxlength="190" placeholder="Noticia 2"></textarea>
+            <div class="studio-inline">
+              <input id="cfgNewsSource1" type="text" maxlength="50" placeholder="Fuente">
+              <input id="cfgNewsTime1" type="text" maxlength="12" placeholder="Hora opcional">
+            </div>
+          </div>
+          <div class="news-editor" data-news="2">
+            <textarea id="cfgNewsText2" rows="2" maxlength="190" placeholder="Noticia 3"></textarea>
+            <div class="studio-inline">
+              <input id="cfgNewsSource2" type="text" maxlength="50" placeholder="Fuente">
+              <input id="cfgNewsTime2" type="text" maxlength="12" placeholder="Hora opcional">
+            </div>
+          </div>
+        </section>
+
+        <section class="studio-section">
+          <h2>Temas en tendencia</h2>
+          <div class="studio-inline studio-three">
+            <input id="cfgTrend0" type="text" maxlength="45" placeholder="Tema 1">
+            <input id="cfgTrend1" type="text" maxlength="45" placeholder="Tema 2">
+            <input id="cfgTrend2" type="text" maxlength="45" placeholder="Tema 3">
+          </div>
+        </section>
+
+        <section class="studio-section">
+          <h2>Música</h2>
+          <label class="studio-check"><input id="cfgMusicEnabled" type="checkbox"> Activar música de fondo</label>
+          <label>Volumen de música <output id="musicVolumeOutput">10%</output>
+            <input id="cfgMusicVolume" type="range" min="0" max="30" step="1" value="10">
+          </label>
+          <div class="studio-actions compact">
+            <label class="file-button">Cargar otra música<input id="customMusicFile" type="file" accept="audio/*"></label>
+            <button id="useDefaultMusic" type="button">Usar música incluida</button>
+            <button id="testMusic" type="button">Probar / pausar</button>
+          </div>
+          <div class="file-status" id="musicFileStatus">Música incluida: fondo instrumental original.</div>
+        </section>
+
+        <section class="studio-section">
+          <h2>Boletín con texto a voz</h2>
+          <p class="studio-help">Generá un MP3 con la herramienta de texto a voz que elijas y cargalo acá. No hace falta grabar tu voz.</p>
+          <label class="studio-check"><input id="cfgBulletinEnabled" type="checkbox"> Reproducir boletín automáticamente</label>
+          <div class="studio-inline">
+            <label>Repetir cada
+              <select id="cfgBulletinInterval">
+                <option value="5">5 minutos</option>
+                <option value="8">8 minutos</option>
+                <option value="10">10 minutos</option>
+                <option value="15">15 minutos</option>
+                <option value="20">20 minutos</option>
+              </select>
+            </label>
+            <label>Volumen
+              <input id="cfgBulletinVolume" type="range" min="20" max="100" step="5" value="85">
+            </label>
+          </div>
+          <div class="studio-actions compact">
+            <label class="file-button">Cargar MP3 del boletín<input id="bulletinFile" type="file" accept="audio/*"></label>
+            <button id="testBulletin" type="button">Probar boletín</button>
+            <button id="clearBulletin" type="button">Quitar boletín</button>
+          </div>
+          <div class="file-status" id="bulletinFileStatus">No hay boletín cargado.</div>
+        </section>
+
+        <section class="studio-section">
+          <h2>Señal automática</h2>
+          <div class="studio-inline">
+            <label>Cambiar placa cada
+              <select id="cfgSlideSeconds">
+                <option value="20">20 segundos</option>
+                <option value="25">25 segundos</option>
+                <option value="30">30 segundos</option>
+                <option value="40">40 segundos</option>
+              </select>
+            </label>
+            <label class="studio-check"><input id="cfgAliasEnabled" type="checkbox"> Mostrar alias ocasionalmente</label>
+          </div>
+          <div class="alias-preview">Alias configurado: <strong>labamdariver.nx</strong></div>
+        </section>
+      </div>
+
+      <footer class="studio-footer">
+        <button id="studioReset" class="danger" type="button">Restablecer contenido</button>
+        <button id="studioSave" class="primary" type="button">GUARDAR Y VOLVER AL VIVO</button>
+      </footer>
+    </div>
+  </aside>
+
+  <audio id="backgroundMusic" src="./audio/fondo-central.mp3" preload="auto" loop></audio>
+  <audio id="bulletinAudio" preload="auto"></audio>
+
   <script src="./titulares.js"></script>
   <script src="./preguntas.js"></script>
   <script src="./curiosidades.js"></script>
   <script src="./app.js"></script>
+  <script src="./studio.js"></script>
   <script src="./pwa.js"></script>
 </body>
 </html>

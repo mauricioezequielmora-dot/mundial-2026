@@ -11,6 +11,7 @@ const WATCHDOG_RELOAD_MS = 12 * 60 * 1000;
 const CACHE_KEY = "central-mundialista-datos-v2";
 const ARG_TZ = "America/Argentina/Buenos_Aires";
 const ARG_TEAM_ID = "37";
+const SUPPORT_ALIAS = "labamdariver.nx";
 
 let refreshTimer = null;
 let retryAttempt = 0;
@@ -146,6 +147,7 @@ function normalizeAndApply(payloads, { fromCache = false, updateTime = null } = 
   initializedScores = true;
   if (!fromCache) freshBaselineReady = true;
   renderAll();
+  window.dispatchEvent(new CustomEvent("central-data-updated"));
 }
 
 function buildScoreSnapshot(games) {
@@ -398,7 +400,7 @@ function renderLiveMatch(live, header, body, card) {
   body.innerHTML = `
     <div class="live-wrap fade-update">
       <div class="live-banner">
-        <span class="live-pulse"></span> RESULTADOS EN VIVO · FASE DE GRUPOS
+        <span class="live-pulse"></span> CENTRAL DE RESULTADOS · ${live.group ? "GRUPO " + live.group : escapeForDisplay(live.type || "MUNDIAL")}
       </div>
 
       <div class="live-scoreboard">
@@ -523,6 +525,10 @@ function renderScorers(match) {
 }
 
 // Fix encoding roto que viene en la API (caracteres raros)
+function escapeForDisplay(value) {
+  return String(value ?? "").replace(/[<>&"']/g, "");
+}
+
 function decodeEntities(str) {
   if (!str) return "";
   return str
@@ -647,6 +653,7 @@ function renderHeadline() {
     el.innerHTML = `
       <span class="h-date">${formatDateLong(new Date())}</span>
       <span class="h-placeholder">Editá titulares.js y subí el cambio a GitHub</span>
+      <span class="support-alias"><span>APOYÁ ESTE PROYECTO</span><strong>Alias: ${SUPPORT_ALIAS}</strong><small>Aporte voluntario</small></span>
     `;
     return;
   }
@@ -657,6 +664,7 @@ function renderHeadline() {
     <span class="h-date">${t.fecha || formatDateLong(new Date())}</span>
     ${t.texto}
     <span class="h-source">${t.fuente || "Central Mundialista"}</span>
+    <span class="support-alias"><span>APOYÁ ESTE PROYECTO</span><strong>Alias: ${SUPPORT_ALIAS}</strong><small>Aporte voluntario</small></span>
   `;
 }
 
@@ -833,6 +841,12 @@ async function init() {
     }
   });
 }
+
+
+window.CentralData = {
+  getState: () => state,
+  forceRefresh: () => loadData(),
+};
 
 window.addEventListener("error", event => {
   console.error("Error global:", event.error || event.message);

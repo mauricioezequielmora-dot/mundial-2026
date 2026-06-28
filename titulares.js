@@ -1,13 +1,8 @@
-/*
-  TITULARES DEL DÍA
-
-  Para cambiarlo, editá únicamente fecha, texto y fuente dentro del bloque.
-  Si dejás fecha: "", la aplicación muestra automáticamente la fecha actual.
-*/
+/* Titular de respaldo. Las noticias del panel local tienen prioridad. */
 window.TITULARES = [
   {
     fecha: "",
-    texto: "Sin señales de OVNIs, pero sí de un Mundial lleno de sorpresas",
+    texto: "Resultados, posiciones y novedades verificadas durante toda la jornada",
     fuente: "Central Mundialista"
   }
 ];

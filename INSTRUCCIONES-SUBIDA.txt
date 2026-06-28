@@ -1,44 +1,30 @@
-CENTRAL MUNDIALISTA 2026 — CÓMO SUBIR ESTA VERSIÓN
+CENTRAL MUNDIALISTA 2026 — SUBIDA COMPLETA
 
-1. Guardá una copia del repositorio actual:
-   - Entrá al repositorio.
-   - Botón Code.
-   - Download ZIP.
+1. Descomprimí este ZIP.
+2. Entrá en: https://github.com/mauricioezequielmora-dot/mundial-2026
+3. Tocá Add file > Upload files.
+4. Seleccioná TODO el contenido extraído, incluida la carpeta audio y la carpeta icons.
+5. Arrastralo a GitHub.
+6. Verificá que index.html quede en la raíz del repositorio.
+7. Mensaje sugerido: Agregar señal automática, música y panel local
+8. Elegí Commit directly to the main branch.
+9. Confirmá Commit changes.
+10. Esperá la tilde verde en Actions.
+11. Abrí la página y hacé Ctrl + F5 en la computadora.
 
-2. Descomprimí este ZIP en la computadora.
+ARCHIVOS NUEVOS IMPORTANTES
+- studio.js
+- audio/fondo-central.mp3
 
-3. Abrí el repositorio:
-   https://github.com/mauricioezequielmora-dot/mundial-2026
+EN EL TELÉFONO
+1. Eliminá el acceso instalado anterior si conserva una versión vieja.
+2. Abrí la web en Chrome y actualizá.
+3. Instalá la aplicación desde Chrome.
+4. Tocá TOCÁ PARA INICIAR: ese toque habilita pantalla completa y música.
+5. Para configurar la jornada, mantené presionado CENTRAL MUNDIALISTA durante 3 segundos.
+6. Cargá noticias verificadas, tendencias y el partido destacado.
+7. Para el boletín, elegí un MP3 generado con texto a voz desde Descargas.
+8. Tocá GUARDAR Y VOLVER AL VIVO.
 
-4. Elegí Add file > Upload files.
-
-5. Seleccioná TODO el contenido de esta carpeta descomprimida.
-   Debés subir los archivos sueltos y la carpeta icons.
-   No subas el ZIP cerrado y no subas una carpeta contenedora adicional.
-
-6. Verificá que en la raíz aparezcan:
-   index.html
-   style.css
-   app.js
-   pwa.js
-   sw.js
-   manifest.webmanifest
-   titulares.js
-   preguntas.js
-   curiosidades.js
-   README.md
-   icons/
-
-7. Mensaje recomendado del commit:
-   Versión resistente para transmisión móvil
-
-8. Confirmá directamente en la rama main.
-
-9. Entrá en Actions y esperá la tilde verde.
-
-10. Abrí la página en la computadora:
-    https://mauricioezequielmora-dot.github.io/mundial-2026/
-
-11. Presioná Ctrl + F5.
-
-12. En el teléfono, eliminá la instalación anterior de la PWA y volvé a instalarla desde Chrome para evitar que conserve una versión vieja.
+IMPORTANTE
+La música incluida es una base instrumental original. El boletín de voz no viene incluido: se carga desde el teléfono para poder cambiarlo cada día sin volver a usar GitHub.

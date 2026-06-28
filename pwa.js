@@ -42,6 +42,7 @@
     await requestWakeLock();
     sessionStorage.setItem("presentationStarted", "1");
     prompt?.classList.add("is-hidden");
+    window.dispatchEvent(new CustomEvent("central-presentation-started"));
   }
 
   if (browserNote && isInstalled()) {
@@ -51,6 +52,7 @@
   if (sessionStorage.getItem("presentationStarted") === "1") {
     prompt?.classList.add("is-hidden");
     requestWakeLock();
+    queueMicrotask(() => window.dispatchEvent(new CustomEvent("central-presentation-started")));
   } else {
     prompt?.addEventListener("click", enterPresentationMode, { once: true });
   }

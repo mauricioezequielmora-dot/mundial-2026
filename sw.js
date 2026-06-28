@@ -1,16 +1,18 @@
-const CACHE_NAME = "central-mundialista-v4-resistente";
+const CACHE_NAME = "central-mundialista-v7-studio-audio";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./style.css",
   "./app.js",
+  "./studio.js",
   "./pwa.js",
   "./titulares.js",
   "./preguntas.js",
   "./curiosidades.js",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "./icons/icon-512.png",
+  "./audio/fondo-central.mp3"
 ];
 
 self.addEventListener("install", event => {
@@ -24,9 +26,7 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-      ))
+      .then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
@@ -38,12 +38,28 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
+  if (request.destination === "audio" || url.pathname.endsWith(".mp3")) {
+    event.respondWith(
+      caches.match(request, { ignoreSearch: true }).then(cached => {
+        if (cached) return cached;
+        return fetch(request).then(response => {
+          if (response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(request, copy)).catch(() => {});
+          }
+          return response;
+        });
+      })
+    );
+    return;
+  }
+
   event.respondWith(
     fetch(request, { cache: "no-store" })
       .then(response => {
-        if (response.ok) {
+        if (response.ok && response.status === 200) {
           const copy = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+          caches.open(CACHE_NAME).then(cache => cache.put(request, copy)).catch(() => {});
         }
         return response;
       })

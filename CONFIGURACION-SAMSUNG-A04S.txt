@@ -1,45 +1,29 @@
-CONFIGURACIÓN RECOMENDADA — SAMSUNG GALAXY A04S
+CONFIGURACIÓN RECOMENDADA — SAMSUNG A04S
 
 ANTES DEL VIVO
+- Instalá la Central Mundialista como aplicación desde Chrome.
+- Orientación horizontal.
+- Modo No molestar activado.
+- Brillo aproximado: 25% a 40%.
+- Teléfono conectado al cargador, sin funda si levanta temperatura.
+- Desactivá ahorro de batería para Chrome/PWA y para la app de transmisión.
+- Permití actividad en segundo plano para la app de transmisión.
+- Cerrá aplicaciones que no uses.
 
-1. Instalá la página como aplicación desde Chrome.
-2. Abrila desde el ícono instalado, no desde una pestaña común.
-3. Colocá el teléfono horizontal.
-4. Tocá “TOCÁ PARA INICIAR” para solicitar pantalla completa y mantener la pantalla activa.
-5. Activá “No molestar” para evitar notificaciones sobre el vivo.
-6. Desactivá el ahorro de energía.
-7. En Ajustes > Aplicaciones > aplicación de transmisión > Batería, elegí “Sin restricciones”.
-8. Hacé lo mismo con Chrome si Android identifica la PWA como parte de Chrome.
-9. En Batería > Límites de uso en segundo plano, agregá la aplicación de transmisión y Chrome a “Nunca suspendidas”, si esa opción aparece.
-10. Desactivá el brillo automático y usá aproximadamente 30 % a 40 %.
-11. Mantené el teléfono conectado al cargador, pero apoyado en un lugar ventilado y sin funda gruesa.
-12. Usá una red Wi-Fi estable y evitá alejarte del router.
-
-CONFIGURACIÓN DE TRANSMISIÓN RECOMENDADA
-
-- Resolución: 1280 × 720
-- FPS: 30
-- Bitrate de video: 3.500 a 4.500 kbps
-- Códec: H.264
-- Audio: 128 kbps, si la aplicación lo permite
-- Orientación: horizontal
+TRANSMISIÓN
+- Resolución: 1280 x 720.
+- 30 FPS.
+- Bitrate inicial: 3000 a 4000 kbps, según la estabilidad del Wi-Fi.
+- Micrófono desactivado si no lo necesitás.
+- Activá captura de audio interno o audio del dispositivo para que salga la música y el boletín.
 
 PRUEBA OBLIGATORIA
+- Hacé primero un vivo no listado de 20 minutos.
+- Miralo desde otro dispositivo con auriculares.
+- Confirmá que se escuchen música y boletín.
+- Después hacé una prueba de 2 horas para temperatura y estabilidad.
 
-1. Hacé un vivo “No listado” de 45 minutos.
-2. Verificá desde otro dispositivo:
-   - que no haya barra de dirección;
-   - que no aparezcan notificaciones;
-   - que el texto se lea bien;
-   - que el teléfono no se caliente demasiado;
-   - que la transmisión no se corte;
-   - que la página siga actualizando la hora y el estado.
-3. Después hacé una prueba de 2 horas antes del primer vivo público largo.
-
-RECUPERACIÓN SI ALGO FALLA
-
-- Si la página muestra “SIN CONEXIÓN”, esperá: conserva el último dato y reintenta sola.
-- Si la transmisión se corta, la página no puede reiniciarla. Debés volver a iniciar el vivo desde la aplicación de transmisión.
-- Si la página queda en una versión vieja, eliminá la PWA, borrá los datos del sitio en Chrome y volvé a instalarla.
-
-Los nombres exactos de los menús pueden variar según la versión de Android y One UI instalada.
+PANEL LOCAL
+- Mantené presionado el nombre CENTRAL MUNDIALISTA durante 3 segundos.
+- Los cambios y MP3 quedan guardados solamente en ese teléfono.
+- Actualizar el proyecto de GitHub no debería borrar esos audios locales, pero conviene conservar los MP3 originales en Descargas.
