@@ -1,0 +1,9 @@
+CORRECCION DE BANDERAS - CAMINO A LA COPA
+
+Subir a GitHub:
+- knockout.js
+- sw.js
+- la carpeta flags completa
+
+Estos archivos reemplazan la lectura de banderas desde la API por 32 banderas locales verificadas.
+Después del commit, esperar Actions en verde y recargar la PWA.

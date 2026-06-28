@@ -4,7 +4,7 @@ PWA horizontal para transmitir desde un teléfono una central de resultados del 
 
 ## Incluye
 
-- Resultados desde la API configurada en `app.js` y panel rotativo **Camino a la Copa** con los 16 cruces de dieciseisavos.
+- Resultados y grupos desde la API configurada en `app.js`.
 - Alternancia de partidos simultáneos cada 60 segundos.
 - Recuperación con últimos datos válidos y reintentos automáticos.
 - Señal central rotativa: partido destacado, noticias, tendencias, clasificación, trivia, chat y alias.
@@ -21,8 +21,3 @@ No es necesario modificar GitHub todos los días. El partido destacado, noticias
 ## Aclaración
 
 La central muestra resultados y estadísticas. No transmite imágenes ni audio de los partidos.
-
-
-## Camino a la Copa
-
-La antigua tabla de grupos fue reemplazada por tarjetas rotativas de los 16 cruces de la ronda de 32. Cada tarjeta muestra horario argentino, estado del partido, datos de fase de grupos y el posible cruce de octavos. Los resultados en vivo se toman de la misma API del tablero cuando están disponibles.

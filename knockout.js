@@ -178,11 +178,24 @@
     }
   ];
 
+  // Las banderas de Camino a la Copa son recursos locales y fijos.
+  // No se toman desde la API porque algunas respuestas pueden devolver una URL incorrecta.
+  const FLAG_ASSET = {
+    "Sudáfrica": "za", "Canadá": "ca", "Brasil": "br", "Japón": "jp",
+    "Alemania": "de", "Paraguay": "py", "Países Bajos": "nl", "Marruecos": "ma",
+    "Costa de Marfil": "ci", "Noruega": "no", "Francia": "fr", "Suecia": "se",
+    "México": "mx", "Ecuador": "ec", "Inglaterra": "eng", "RD Congo": "cd",
+    "Bélgica": "be", "Senegal": "sn", "Estados Unidos": "us", "Bosnia y Herzegovina": "ba",
+    "España": "es", "Austria": "at", "Portugal": "pt", "Croacia": "hr",
+    "Suiza": "ch", "Argelia": "dz", "Australia": "au", "Egipto": "eg",
+    "Argentina": "ar", "Cabo Verde": "cv", "Colombia": "co", "Ghana": "gh"
+  };
+
   const FLAG_FALLBACK = {
     "Sudáfrica": "🇿🇦", "Canadá": "🇨🇦", "Brasil": "🇧🇷", "Japón": "🇯🇵",
     "Alemania": "🇩🇪", "Paraguay": "🇵🇾", "Países Bajos": "🇳🇱", "Marruecos": "🇲🇦",
     "Costa de Marfil": "🇨🇮", "Noruega": "🇳🇴", "Francia": "🇫🇷", "Suecia": "🇸🇪",
-    "México": "🇲🇽", "Ecuador": "🇪🇨", "Inglaterra": "🏴", "RD Congo": "🇨🇩",
+    "México": "🇲🇽", "Ecuador": "🇪🇨", "Inglaterra": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "RD Congo": "🇨🇩",
     "Bélgica": "🇧🇪", "Senegal": "🇸🇳", "Estados Unidos": "🇺🇸", "Bosnia y Herzegovina": "🇧🇦",
     "España": "🇪🇸", "Austria": "🇦🇹", "Portugal": "🇵🇹", "Croacia": "🇭🇷",
     "Suiza": "🇨🇭", "Argelia": "🇩🇿", "Australia": "🇦🇺", "Egipto": "🇪🇬",
@@ -294,11 +307,11 @@
     return `${displayName}: ${record.pts} pts · ${gf}-${ga} goles · Grupo ${record.groupName}`;
   }
 
-  function flagMarkup(team, displayName) {
-    if (team?.flag) {
-      return `<img class="ko-flag" src="${team.flag}" alt="" onerror="this.replaceWith(document.createTextNode('${FLAG_FALLBACK[displayName] || '⚽'}'))">`;
-    }
-    return `<span class="ko-flag-emoji">${FLAG_FALLBACK[displayName] || "⚽"}</span>`;
+  function flagMarkup(_team, displayName) {
+    const code = FLAG_ASSET[displayName];
+    const fallback = FLAG_FALLBACK[displayName] || "⚽";
+    if (!code) return `<span class="ko-flag-emoji">${fallback}</span>`;
+    return `<img class="ko-flag" src="./flags/${code}.png" alt="Bandera de ${displayName}" onerror="this.outerHTML='<span class=\'ko-flag-emoji\'>${fallback}</span>'">`;
   }
 
   function scoreInFixtureOrder(apiMatch, homeTeam, awayTeam) {
