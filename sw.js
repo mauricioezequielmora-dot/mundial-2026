@@ -1,4 +1,4 @@
-const CACHE_NAME = "central-mundialista-v10-banderas-corregidas";
+const CACHE_NAME = "central-mundialista-v11-horarios-argentina";
 const APP_SHELL = [
   "./",
   "./index.html",

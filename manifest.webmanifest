@@ -2,13 +2,16 @@
   "id": "./",
   "name": "Central Mundialista 2026",
   "short_name": "Mundial 2026",
-  "description": "Central horizontal con resultados, grupos, noticias, curiosidades, música y boletines locales.",
+  "description": "Central horizontal con resultados, Camino a la Copa, noticias, música, boletines y control remoto privado.",
   "lang": "es-AR",
   "dir": "ltr",
   "start_url": "./?modo=pwa",
   "scope": "./",
   "display": "fullscreen",
-  "display_override": ["fullscreen", "standalone"],
+  "display_override": [
+    "fullscreen",
+    "standalone"
+  ],
   "orientation": "landscape",
   "background_color": "#0a0e1a",
   "theme_color": "#0a0e1a",

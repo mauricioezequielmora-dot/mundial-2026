@@ -1,23 +1,28 @@
-# Central Mundialista 2026
+# Central Mundialista 2026 — Camino a la Copa + panel remoto
 
-PWA horizontal para transmitir desde un teléfono una central de resultados del Mundial.
+Versión completa para emitir desde un Samsung en horizontal y administrar el contenido desde otro teléfono o una computadora, sin abrir la configuración en la pantalla transmitida.
 
 ## Incluye
 
-- Resultados y grupos desde la API configurada en `app.js`.
-- Alternancia de partidos simultáneos cada 60 segundos.
-- Recuperación con últimos datos válidos y reintentos automáticos.
-- Señal central rotativa: partido destacado, noticias, tendencias, clasificación, trivia, chat y alias.
-- Panel local accesible manteniendo presionado el nombre de la central durante 3 segundos.
-- Música instrumental original incluida.
-- Carga local de música propia y boletín MP3 generado mediante texto a voz.
-- Configuración y audios persistentes en el teléfono.
-- Alias de apoyo: `labamdariver.nx`.
+- resultados, partidos simultáneos y recuperación automática;
+- Camino a la Copa con los 16 cruces;
+- señal automática de noticias, tendencias, trivias y preguntas;
+- música, boletines MP3 y alias `labamdariver.nx`;
+- PWA horizontal;
+- panel remoto en `/control/`;
+- Firebase Authentication con correo y contraseña;
+- Realtime Database para aplicar cambios sin recargar;
+- borradores, historial y restauración;
+- comandos inmediatos para cambiar de placa o reproducir el boletín.
 
-## Archivos diarios
+## Configuración obligatoria
 
-No es necesario modificar GitHub todos los días. El partido destacado, noticias, tendencias, pregunta y audios se cargan desde el panel del teléfono.
+El panel remoto necesita un proyecto Firebase propio. Seguí `INSTRUCCIONES-PANEL-REMOTO.txt`, completá `firebase-config.js` y publicá las reglas de `firebase-rules.json`.
 
-## Aclaración
+La señal principal continúa funcionando aunque Firebase todavía no esté configurado; en ese caso conserva el panel local anterior.
 
-La central muestra resultados y estadísticas. No transmite imágenes ni audio de los partidos.
+
+## Corrección de horarios
+- Horarios eliminatorios fijados en hora argentina (UTC-3).
+- Contador independiente de la zona horaria del navegador.
+- Caché PWA actualizada para evitar conservar la versión anterior.

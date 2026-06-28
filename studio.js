@@ -23,6 +23,7 @@
     bulletinIntervalMin: 10,
     bulletinVolume: 0.85,
     bulletinName: "",
+    musicUrl: "",
     slideSeconds: 30,
     aliasEnabled: true
   };
@@ -39,6 +40,8 @@
   let musicObjectUrl = "";
   let bulletinObjectUrl = "";
   let longPressTimer = null;
+  let remoteBulletinVersion = "";
+  let remoteConfigVersion = 0;
 
   const $ = (id) => document.getElementById(id);
   const backgroundMusic = $("backgroundMusic");
@@ -49,20 +52,31 @@
     return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
   }
 
-  function loadConfig() {
+  function normalizeConfig(input = {}) {
     const defaults = cloneDefaults();
+    const value = input && typeof input === "object" ? input : {};
+    return {
+      ...defaults,
+      ...value,
+      news: defaults.news.map((item, index) => ({ ...item, ...(value.news?.[index] || {}) })),
+      trends: defaults.trends.map((item, index) => value.trends?.[index] ?? item),
+      musicEnabled: value.musicEnabled === undefined ? defaults.musicEnabled : Boolean(value.musicEnabled),
+      bulletinEnabled: value.bulletinEnabled === undefined ? defaults.bulletinEnabled : Boolean(value.bulletinEnabled),
+      aliasEnabled: value.aliasEnabled === undefined ? defaults.aliasEnabled : Boolean(value.aliasEnabled),
+      musicVolume: clamp(value.musicVolume ?? defaults.musicVolume, 0, 0.3),
+      bulletinVolume: clamp(value.bulletinVolume ?? defaults.bulletinVolume, 0.2, 1),
+      bulletinIntervalMin: clamp(value.bulletinIntervalMin ?? defaults.bulletinIntervalMin, 5, 20),
+      slideSeconds: clamp(value.slideSeconds ?? defaults.slideSeconds, 20, 40)
+    };
+  }
+
+  function loadConfig() {
     try {
       const parsed = JSON.parse(localStorage.getItem(CONFIG_KEY) || "null");
-      if (!parsed || typeof parsed !== "object") return defaults;
-      return {
-        ...defaults,
-        ...parsed,
-        news: defaults.news.map((item, index) => ({ ...item, ...(parsed.news?.[index] || {}) })),
-        trends: defaults.trends.map((item, index) => parsed.trends?.[index] ?? item)
-      };
+      return normalizeConfig(parsed || {});
     } catch (error) {
       console.warn("No se pudo leer la configuración de la central:", error);
-      return defaults;
+      return normalizeConfig();
     }
   }
 
@@ -147,6 +161,8 @@
     if (customMusic) {
       musicObjectUrl = URL.createObjectURL(customMusic);
       backgroundMusic.src = musicObjectUrl;
+    } else if (config.musicUrl && /^https?:\/\//i.test(config.musicUrl)) {
+      backgroundMusic.src = config.musicUrl;
     } else {
       backgroundMusic.src = DEFAULT_MUSIC;
     }
@@ -619,6 +635,112 @@
       showToast("Configuración guardada");
     });
   }
+
+  async function applyRemoteConfig(payload, metadata = {}) {
+    if (!payload || typeof payload !== "object") return false;
+    const nextVersion = Number(metadata.version || payload.version || Date.now());
+    if (nextVersion && nextVersion === remoteConfigVersion) return true;
+
+    const preservedAudioNames = {
+      customMusicName: config.customMusicName,
+      bulletinName: config.bulletinName
+    };
+    config = normalizeConfig({ ...config, ...payload, ...preservedAudioNames });
+    remoteConfigVersion = nextVersion || Date.now();
+    saveConfig();
+    populatePanel();
+    await loadAudioSources();
+    scheduleSlides();
+    scheduleBulletin();
+
+    if (presentationStarted) {
+      if (config.musicEnabled) await startPresentationAudio();
+      else backgroundMusic.pause();
+    }
+    updateAudioChip();
+    showToast("Cambios remotos aplicados");
+    window.dispatchEvent(new CustomEvent("central-remote-config-applied", {
+      detail: { version: remoteConfigVersion, updatedAt: metadata.updatedAt || null }
+    }));
+    return true;
+  }
+
+  async function applyRemoteBulletin(payload) {
+    if (!payload || typeof payload !== "object" || !payload.dataUrl) return false;
+    const signature = String(payload.version || payload.updatedAt || payload.name || payload.dataUrl.length);
+    if (signature === remoteBulletinVersion) return true;
+
+    try {
+      const response = await fetch(payload.dataUrl);
+      const blob = await response.blob();
+      if (!blob.type.startsWith("audio/")) throw new Error("El archivo remoto no es audio");
+      await setAudioBlob("bulletin", blob);
+      config.bulletinName = String(payload.name || "boletin-remoto.mp3").slice(0, 120);
+      config.bulletinEnabled = payload.enabled !== false;
+      remoteBulletinVersion = signature;
+      saveConfig();
+      await loadAudioSources();
+      populatePanel();
+      scheduleBulletin();
+      showToast("Boletín remoto actualizado");
+      return true;
+    } catch (error) {
+      console.error("No se pudo aplicar el boletín remoto:", error);
+      showToast("Falló la descarga del boletín remoto");
+      return false;
+    }
+  }
+
+  function showSectionNow(kind) {
+    buildSlides();
+    const normalizedKind = String(kind || "").toLowerCase();
+    const index = slides.findIndex(slide =>
+      String(slide.kind || "").toLowerCase() === normalizedKind ||
+      String(slide.section || "").toLowerCase().includes(normalizedKind)
+    );
+    if (index < 0) return false;
+    renderSlide(index);
+    return true;
+  }
+
+  function nextSlideNow() {
+    advanceSlide();
+    return true;
+  }
+
+  async function playBulletinNow() {
+    await playBulletin({ test: true });
+    return true;
+  }
+
+  async function setMusicEnabledNow(enabled) {
+    config.musicEnabled = Boolean(enabled);
+    saveConfig();
+    if (config.musicEnabled) {
+      await startPresentationAudio();
+    } else {
+      backgroundMusic.pause();
+      updateAudioChip();
+    }
+    populatePanel();
+    return true;
+  }
+
+  window.CentralStudio = {
+    getConfig: () => JSON.parse(JSON.stringify(config)),
+    applyRemoteConfig,
+    applyRemoteBulletin,
+    showSection: showSectionNow,
+    nextSlide: nextSlideNow,
+    playBulletin: playBulletinNow,
+    setMusicEnabled: setMusicEnabledNow,
+    refresh: async () => {
+      await loadAudioSources();
+      scheduleSlides();
+      scheduleBulletin();
+    }
+  };
+  window.dispatchEvent(new Event("central-studio-ready"));
 
   async function init() {
     bindLongPress();

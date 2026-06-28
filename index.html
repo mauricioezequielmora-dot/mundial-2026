@@ -51,6 +51,7 @@
       </div>
       <div class="header-right">
         <div class="audio-chip" id="audioChip" aria-label="Estado del audio">♫ FONDO</div>
+        <div class="remote-chip connecting" id="remoteStatus" aria-label="Estado del control remoto">☁ CONECTANDO</div>
         <div class="clock" id="clock">--:--</div>
         <div class="live-badge" id="liveStatus">
           <span class="live-dot"></span>
@@ -100,7 +101,7 @@
       <section class="col-right">
         <div class="standings-card">
           <div class="card-title">
-            TABLA DE GRUPOS
+            CAMINO A LA COPA
             <span class="group-nav" id="groupNav"></span>
           </div>
           <div class="standings-list" id="standingsList">
@@ -245,7 +246,9 @@
   <script src="./preguntas.js"></script>
   <script src="./curiosidades.js"></script>
   <script src="./app.js"></script>
+  <script src="./knockout.js?v=20260628-horarios-arg-1"></script>
   <script src="./studio.js"></script>
+  <script type="module" src="./remote-control.js"></script>
   <script src="./pwa.js"></script>
 </body>
 </html>
