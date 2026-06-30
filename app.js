@@ -96,7 +96,13 @@ function normalizeAndApply(payloads, { fromCache = false, updateTime = null } = 
 
   const teamsMap = {};
   safeArray(teamsRes.teams).forEach(team => {
-    if (team && team.id != null) teamsMap[String(team.id)] = team;
+    if (!team || team.id == null) return;
+    const localFlag = window.CentralFlags?.resolve?.(team) || "";
+    teamsMap[String(team.id)] = {
+      ...team,
+      api_flag: team.flag || "",
+      flag: localFlag || team.flag || ""
+    };
   });
 
   const stadiumsMap = {};

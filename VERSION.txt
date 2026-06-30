@@ -1,0 +1,4 @@
+CENTRAL MUNDIALISTA 2026
+Versión: 12 — banderas locales + radar automático + animación original
+Fecha de paquete: 2026-06-30
+Caché: central-mundialista-v12-banderas-radar-motion

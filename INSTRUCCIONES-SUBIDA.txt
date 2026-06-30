@@ -1,30 +1,43 @@
 CENTRAL MUNDIALISTA 2026 — SUBIDA COMPLETA
 
+ARCHIVO FUENTE
+Usá solamente el contenido de este ZIP. No mezcles archivos de versiones anteriores.
+
+SUBIDA A GITHUB
 1. Descomprimí este ZIP.
 2. Entrá en: https://github.com/mauricioezequielmora-dot/mundial-2026
-3. Tocá Add file > Upload files.
-4. Seleccioná TODO el contenido extraído, incluida la carpeta audio y la carpeta icons.
-5. Arrastralo a GitHub.
-6. Verificá que index.html quede en la raíz del repositorio.
-7. Mensaje sugerido: Agregar señal automática, música y panel local
-8. Elegí Commit directly to the main branch.
-9. Confirmá Commit changes.
-10. Esperá la tilde verde en Actions.
-11. Abrí la página y hacé Ctrl + F5 en la computadora.
+3. Elegí Add file > Upload files.
+4. Seleccioná TODO el contenido extraído, incluidas las carpetas audio, flags e icons.
+5. Verificá que index.html quede en la raíz del repositorio, no dentro de otra carpeta.
+6. Mensaje sugerido: Corregir banderas y agregar radar automático
+7. Elegí Commit directly to the main branch.
+8. Confirmá Commit changes.
+9. Esperá la tilde verde en Actions y luego abrí la página publicada.
 
-ARCHIVOS NUEVOS IMPORTANTES
+ARCHIVOS IMPORTANTES DE ESTA VERSIÓN
+- flags.js
+- news-feed.js
 - studio.js
+- knockout.js
+- flags/
 - audio/fondo-central.mp3
 
-EN EL TELÉFONO
-1. Eliminá el acceso instalado anterior si conserva una versión vieja.
-2. Abrí la web en Chrome y actualizá.
-3. Instalá la aplicación desde Chrome.
-4. Tocá TOCÁ PARA INICIAR: ese toque habilita pantalla completa y música.
-5. Para configurar la jornada, mantené presionado CENTRAL MUNDIALISTA durante 3 segundos.
-6. Cargá noticias verificadas, tendencias y el partido destacado.
-7. Para el boletín, elegí un MP3 generado con texto a voz desde Descargas.
-8. Tocá GUARDAR Y VOLVER AL VIVO.
+ARCHIVOS OBSOLETOS QUE NO DEBEN QUEDAR EN EL REPOSITORIO
+Si aparecen por una carga anterior, eliminá:
+- control/
+- firebase-config.js
+- firebase-rules.json
+- remote-control.js
+- INSTRUCCIONES-PANEL-REMOTO.txt
+- PRUEBAS-PANEL-REMOTO.txt
 
-IMPORTANTE
-La música incluida es una base instrumental original. El boletín de voz no viene incluido: se carga desde el teléfono para poder cambiarlo cada día sin volver a usar GitHub.
+ACTUALIZACIÓN EN EL SAMSUNG
+1. Cerrá la PWA.
+2. Abrí la página en Chrome y actualizá.
+3. Si sigue apareciendo la versión vieja, eliminá la aplicación instalada y volvé a instalarla desde Chrome.
+4. Tocá TOCÁ PARA INICIAR para habilitar pantalla completa y audio web.
+5. Comprobá que cada selección muestre una bandera distinta.
+6. Hacé un vivo no listado y verificá el audio desde otro dispositivo.
+
+AUDIO
+En la aplicación transmisora seleccioná audio interno, audio del dispositivo o sonidos multimedia. Podés mantener el micrófono apagado para que no entre sonido ambiente. El menú exacto depende de la aplicación usada para emitir.

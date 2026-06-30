@@ -1,13 +1,42 @@
-COMPROBACIONES DEL PAQUETE
+COMPROBACIONES DEL PAQUETE — VERSIÓN 12
 
-- Sintaxis validada en app.js, studio.js, pwa.js, sw.js y archivos de contenido.
-- Rutas de scripts, CSS, manifest, iconos y música comprobadas.
-- No hay identificadores HTML duplicados.
-- Estructura preparada para 800 x 360 CSS px en horizontal.
-- Archivo de música validado: MP3 estéreo, 72 segundos, 128 kbps.
-- Caché PWA actualizada para incluir studio.js y la música.
+VALIDADO EN ARCHIVOS
+- Sintaxis correcta en los 10 archivos JavaScript del paquete mediante node --check.
+- manifest.webmanifest validado como JSON.
+- index.html: 65 identificadores, sin duplicados.
+- Rutas locales de HTML comprobadas, sin archivos faltantes.
+- Service worker: 48 recursos en APP_SHELL, sin archivos faltantes.
+- Caché PWA: central-mundialista-v12-banderas-radar-motion.
+- No quedan archivos ni referencias de ejecución a /control/, Firebase o remote-control.js.
 
-PENDIENTE DE PRUEBA FÍSICA
-- Captura de audio interno de la aplicación elegida para transmitir.
+BANDERAS
+- 32 selecciones del fixture resolvieron a 32 recursos locales existentes.
+- Comprobación específica:
+  Francia -> flags/fr.png
+  Suecia -> flags/se.png
+  México -> flags/mx.png
+  Ecuador -> flags/ec.png
+  Suiza -> flags/ch.png
+  Argelia -> flags/dz.png
+- Prueba de regresión con una respuesta simulada de API que entregaba la bandera de México para todos los equipos: app.js sustituyó esas URL por las banderas locales correctas.
+
+HORARIOS UTC-3
+- 30/06/2026 18:00 Argentina -> 30/06/2026 21:00 UTC.
+- 30/06/2026 22:00 Argentina -> 01/07/2026 01:00 UTC.
+- 03/07/2026 00:00 Argentina -> 03/07/2026 03:00 UTC.
+
+DISEÑO Y CONTENIDO
+- Vista equivalente a 800 x 360 CSS px probada en navegador automatizado: sin desborde horizontal ni errores de página.
+- Banderas de Francia y Suecia cargaron como imágenes locales en la prueba visual.
+- La animación central original se renderizó correctamente.
+- El radar de noticias fue probado con respuestas simuladas: aceptó dominios permitidos, descartó un dominio no permitido y conservó la última copia válida ante una falla posterior.
+- La animación central usa HTML/CSS propio y no incorpora material de transmisiones deportivas.
+
+AUDIO
+- audio/fondo-central.mp3 validado: MP3, estéreo, 44.100 Hz, 128 kbps, 72,045714 segundos.
+- El código desactiva mute, usa reproducción inline e inicia el audio después de la interacción del usuario.
+
+NO CONFIRMADO EN ESTE ENTORNO
+- Respuesta en vivo de la API deportiva y de GDELT desde el Samsung.
+- Captura de audio interno por la aplicación elegida para transmitir a YouTube.
 - Temperatura y estabilidad durante varias horas en el Samsung A04s.
-- Comportamiento real de la API durante los partidos.

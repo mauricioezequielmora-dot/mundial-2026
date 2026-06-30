@@ -1,14 +1,14 @@
 (() => {
   "use strict";
 
-  const CONFIG_KEY = "central-mundialista-studio-v1";
+  const CONFIG_KEY = "central-mundialista-studio-v2";
   const DB_NAME = "central-mundialista-audio-v1";
   const DB_STORE = "audio";
   const DEFAULT_MUSIC = "./audio/fondo-central.mp3";
   const SUPPORT_ALIAS = "labamdariver.nx";
 
   const DEFAULT_CONFIG = {
-    featuredMatch: "Partido destacado de la jornada",
+    featuredMatch: "",
     dailyQuestion: "¿Quién gana el partido más importante de hoy?",
     news: [
       { text: "", source: "", time: "" },
@@ -32,6 +32,7 @@
   let slides = [];
   let slideIndex = 0;
   let triviaIndex = 0;
+  let motionCycle = 0;
   let slideTimer = null;
   let bulletinTimer = null;
   let panelOpen = false;
@@ -219,6 +220,10 @@
 
   async function startPresentationAudio() {
     presentationStarted = true;
+    backgroundMusic.muted = false;
+    bulletinAudio.muted = false;
+    backgroundMusic.playsInline = true;
+    bulletinAudio.playsInline = true;
     backgroundMusic.volume = clamp(config.musicVolume, 0, 0.3);
     if (!config.musicEnabled) {
       backgroundMusic.pause();
@@ -303,6 +308,40 @@
     return window.TITULARES[window.TITULARES.length - 1];
   }
 
+  function formatAutomaticNewsTime(value) {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    return new Intl.DateTimeFormat("es-AR", {
+      timeZone: "America/Argentina/Buenos_Aires",
+      day: "2-digit",
+      month: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    }).format(date).replace(",", " ·");
+  }
+
+  function getAutomaticNews() {
+    const automatic = window.CentralNews?.getItems?.();
+    return Array.isArray(automatic) ? automatic.slice(0, 3) : [];
+  }
+
+  function getMotionSlide() {
+    const variants = [
+      { section: "DESAFÍO VISUAL", kicker: "MIRÁ LA PELOTA", question: "¿AL ÁNGULO O AL PALO?", className: "shot-corner" },
+      { section: "JUGADA AUTOMÁTICA", kicker: "SE DEFINE EN SEGUNDOS", question: "¿GOL O ATAJADA?", className: "shot-save" },
+      { section: "PAUSA ACTIVA", kicker: "NO LE SAQUES LA VISTA", question: "¿DÓNDE TERMINA EL REMATE?", className: "shot-post" }
+    ];
+    const variant = variants[motionCycle % variants.length];
+    motionCycle += 1;
+    return {
+      section: variant.section,
+      kind: "motion",
+      html: `<div class="broadcast-kicker">${escapeHtml(variant.kicker)}</div><div class="motion-stage ${variant.className}" aria-label="Animación original de una pelota rematando al arco"><div class="motion-crowd"></div><div class="motion-goal"><span></span><span></span><span></span><span></span></div><div class="motion-keeper">🧤</div><div class="motion-ball">⚽</div><div class="motion-impact"></div></div><div class="motion-question">${escapeHtml(variant.question)}</div><div class="broadcast-note">Animación propia de la Central · sin imágenes de transmisiones.</div>`
+    };
+  }
+
   function getQualifiersSlide() {
     const snapshot = window.CentralData?.getState?.();
     if (!snapshot?.groups || !snapshot.currentGroup) return null;
@@ -358,6 +397,23 @@
       }
     }
 
+    const automaticNews = getAutomaticNews();
+    if (automaticNews.length) {
+      next.push({
+        section: "EN TENDENCIA",
+        kind: "trends",
+        html: `<div class="broadcast-kicker">TITULARES RECIENTES EN MEDIOS</div><div class="trend-list auto-news-list">${automaticNews.map((item, index) => `<div><span>${index + 1}</span><strong>${escapeHtml(item.title)}</strong></div>`).join("")}</div><div class="broadcast-note">Se muestra el titular y el dominio de origen. Si la conexión falla, se conserva la última copia válida.</div>`
+      });
+      automaticNews.slice(0, 2).forEach(item => {
+        const sourceLine = [item.domain, formatAutomaticNewsTime(item.seenAt)].filter(Boolean).join(" · ");
+        next.push({
+          section: "RADAR DE MEDIOS",
+          kind: "news auto-news",
+          html: `<div class="broadcast-kicker">TITULAR RECIENTE EN MEDIOS</div><div class="broadcast-main news-text">${escapeHtml(item.title)}</div><div class="broadcast-source">Fuente: ${escapeHtml(sourceLine || item.domain)}</div>`
+        });
+      });
+    }
+
     const trendItems = config.trends.map(value => value.trim()).filter(Boolean);
     if (trendItems.length) {
       next.push({
@@ -394,6 +450,8 @@
         html: `<div class="broadcast-kicker">PREGUNTA PARA EL CHAT</div><div class="broadcast-main">${escapeHtml(config.dailyQuestion)}</div><div class="chat-cta">ESCRIBÍ TU RESPUESTA EN EL CHAT</div>`
       });
     }
+
+    next.push(getMotionSlide());
 
     next.push({
       section: "SEGUÍ LA CENTRAL",
@@ -753,6 +811,12 @@
     window.addEventListener("central-presentation-started", startPresentationAudio);
     window.addEventListener("central-data-updated", () => {
       if (!panelOpen && slideIndex === 0) buildSlides();
+    });
+    window.addEventListener("central-news-updated", () => {
+      if (!panelOpen) {
+        buildSlides();
+        renderSlide(Math.min(slideIndex, Math.max(0, slides.length - 1)));
+      }
     });
 
     document.addEventListener("pointerdown", () => {

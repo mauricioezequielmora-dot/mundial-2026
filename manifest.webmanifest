@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Central Mundialista 2026",
   "short_name": "Mundial 2026",
-  "description": "Central horizontal con resultados, Camino a la Copa, noticias, música, boletines y control remoto privado.",
+  "description": "Central horizontal con resultados, Camino a la Copa, banderas locales, radar de noticias, música y boletines.",
   "lang": "es-AR",
   "dir": "ltr",
   "start_url": "./?modo=pwa",

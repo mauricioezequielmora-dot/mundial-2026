@@ -14,8 +14,11 @@ TRANSMISIÓN
 - Resolución: 1280 x 720.
 - 30 FPS.
 - Bitrate inicial: 3000 a 4000 kbps, según la estabilidad del Wi-Fi.
-- Micrófono desactivado si no lo necesitás.
-- Activá captura de audio interno o audio del dispositivo para que salga la música y el boletín.
+- Micrófono desactivado para evitar el sonido ambiente.
+- Fuente de audio: audio interno, audio del dispositivo o sonidos multimedia.
+
+IMPORTANTE SOBRE EL SONIDO
+La página puede reproducir música y, aun así, YouTube recibir silencio si la aplicación transmisora no captura audio interno. La PWA no puede cambiar ese permiso de Android. No puedo indicar el nombre exacto del botón sin saber qué aplicación se usa para transmitir.
 
 PRUEBA OBLIGATORIA
 - Hacé primero un vivo no listado de 20 minutos.
@@ -24,6 +27,6 @@ PRUEBA OBLIGATORIA
 - Después hacé una prueba de 2 horas para temperatura y estabilidad.
 
 PANEL LOCAL
-- Mantené presionado el nombre CENTRAL MUNDIALISTA durante 3 segundos.
+- Mantené presionado CENTRAL MUNDIALISTA durante 3 segundos.
+- Sirve para probar música, cargar un boletín MP3 o cambiar contenido manual.
 - Los cambios y MP3 quedan guardados solamente en ese teléfono.
-- Actualizar el proyecto de GitHub no debería borrar esos audios locales, pero conviene conservar los MP3 originales en Descargas.
