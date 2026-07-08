@@ -1,0 +1,13 @@
+COMPROBACIONES DEL PAQUETE
+
+- Sintaxis validada en app.js, studio.js, pwa.js, sw.js y archivos de contenido.
+- Rutas de scripts, CSS, manifest, iconos y música comprobadas.
+- No hay identificadores HTML duplicados.
+- Estructura preparada para 800 x 360 CSS px en horizontal.
+- Archivo de música validado: MP3 estéreo, 72 segundos, 128 kbps.
+- Caché PWA actualizada para incluir studio.js y la música.
+
+PENDIENTE DE PRUEBA FÍSICA
+- Captura de audio interno de la aplicación elegida para transmitir.
+- Temperatura y estabilidad durante varias horas en el Samsung A04s.
+- Comportamiento real de la API durante los partidos.

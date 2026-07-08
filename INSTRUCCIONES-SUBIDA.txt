@@ -1,0 +1,30 @@
+CENTRAL MUNDIALISTA 2026 — SUBIDA COMPLETA
+
+1. Descomprimí este ZIP.
+2. Entrá en: https://github.com/mauricioezequielmora-dot/mundial-2026
+3. Tocá Add file > Upload files.
+4. Seleccioná TODO el contenido extraído, incluida la carpeta audio y la carpeta icons.
+5. Arrastralo a GitHub.
+6. Verificá que index.html quede en la raíz del repositorio.
+7. Mensaje sugerido: Agregar señal automática, música y panel local
+8. Elegí Commit directly to the main branch.
+9. Confirmá Commit changes.
+10. Esperá la tilde verde en Actions.
+11. Abrí la página y hacé Ctrl + F5 en la computadora.
+
+ARCHIVOS NUEVOS IMPORTANTES
+- studio.js
+- audio/fondo-central.mp3
+
+EN EL TELÉFONO
+1. Eliminá el acceso instalado anterior si conserva una versión vieja.
+2. Abrí la web en Chrome y actualizá.
+3. Instalá la aplicación desde Chrome.
+4. Tocá TOCÁ PARA INICIAR: ese toque habilita pantalla completa y música.
+5. Para configurar la jornada, mantené presionado CENTRAL MUNDIALISTA durante 3 segundos.
+6. Cargá noticias verificadas, tendencias y el partido destacado.
+7. Para el boletín, elegí un MP3 generado con texto a voz desde Descargas.
+8. Tocá GUARDAR Y VOLVER AL VIVO.
+
+IMPORTANTE
+La música incluida es una base instrumental original. El boletín de voz no viene incluido: se carga desde el teléfono para poder cambiarlo cada día sin volver a usar GitHub.

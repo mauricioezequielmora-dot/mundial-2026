@@ -1,0 +1,19 @@
+PRUEBAS REALIZADAS — PANEL REMOTO
+=================================
+
+- Sintaxis JavaScript validada con Node.js:
+  app.js, studio.js, knockout.js, remote-control.js, control/control.js y sw.js.
+- Rutas locales de index.html y control/index.html verificadas.
+- Estructura de firebase-rules.json validada como JSON.
+- Estructura de manifest.webmanifest validada como JSON.
+- Verificación de archivos incluidos en la caché PWA.
+- Verificación del límite de boletín remoto de 1,5 MB.
+- Verificación de respaldo local: la pantalla conserva la última configuración
+  recibida en localStorage y el último boletín en IndexedDB.
+
+NO PROBADO TODAVÍA
+------------------
+No se realizó una prueba de punta a punta contra un proyecto Firebase real,
+porque ese proyecto, su configuración, el usuario administrador y el UID deben
+crearse dentro de la cuenta del propietario. Después de configurar Firebase,
+hay que hacer una prueba no listada antes de usarlo en un vivo público.

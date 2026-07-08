@@ -1,0 +1,163 @@
+CENTRAL MUNDIALISTA 2026 — PANEL REMOTO PRIVADO
+=================================================
+
+QUÉ HACE ESTA VERSIÓN
+---------------------
+- El Samsung que transmite sigue mostrando la señal sin salir de la página.
+- Desde otro teléfono o una computadora abrís /control/.
+- Iniciás sesión con correo y contraseña.
+- Cambiás partido destacado, noticias, fuentes, tendencias, pregunta, música,
+  tiempos, alias y boletín MP3.
+- Al tocar PUBLICAR EN EL VIVO, el Samsung recibe el cambio sin recargar.
+- También podés mandar comandos inmediatos: próxima placa, mostrar noticia,
+  reproducir boletín, encender o silenciar música.
+- Guarda borradores e historial de versiones.
+
+IMPORTANTE
+----------
+Los archivos ya están programados, pero el panel remoto necesita TU proyecto
+Firebase. No puedo crear ese proyecto dentro de tu cuenta. La configuración se
+hace una sola vez.
+
+La contraseña NO se escribe en GitHub. Solo se utiliza dentro de Firebase
+Authentication.
+
+URL DEL PANEL CUANDO TODO ESTÉ PUBLICADO
+----------------------------------------
+https://mauricioezequielmora-dot.github.io/mundial-2026/control/
+
+PASO 1 — CREAR EL PROYECTO FIREBASE
+------------------------------------
+1. Entrá a https://console.firebase.google.com/
+2. Tocá "Crear un proyecto".
+3. Nombre sugerido: central-mundialista-2026
+4. Google Analytics es opcional. Para este panel no es obligatorio.
+5. Terminá la creación.
+
+PASO 2 — REGISTRAR LA APLICACIÓN WEB
+------------------------------------
+1. En la pantalla principal del proyecto, tocá el ícono Web: </>
+2. Nombre sugerido: panel-mundial
+3. No hace falta activar Firebase Hosting porque usás GitHub Pages.
+4. Tocá "Registrar app".
+5. Firebase mostrará un objeto parecido a:
+
+   const firebaseConfig = {
+     apiKey: "...",
+     authDomain: "...",
+     databaseURL: "...",
+     projectId: "...",
+     storageBucket: "...",
+     messagingSenderId: "...",
+     appId: "..."
+   };
+
+6. Conservá esos valores.
+
+PASO 3 — CREAR REALTIME DATABASE
+--------------------------------
+1. Menú lateral → Compilación / Build → Realtime Database.
+2. Tocá "Crear base de datos".
+3. Elegí una ubicación disponible.
+4. Seleccioná modo bloqueado / Locked mode.
+5. Terminá la creación.
+
+IMPORTANTE: el valor databaseURL debe ser exactamente el que aparece en la
+configuración de tu aplicación. Puede cambiar según la región elegida.
+
+PASO 4 — ACTIVAR EL ACCESO CON CORREO Y CONTRASEÑA
+--------------------------------------------------
+1. Menú lateral → Authentication.
+2. Tocá "Comenzar".
+3. Método de acceso / Sign-in method.
+4. Activá Correo electrónico/contraseña.
+5. Guardá.
+6. Entrá en Usuarios / Users.
+7. Tocá "Agregar usuario".
+8. Escribí el correo y una contraseña fuerte que usarás para el panel.
+9. Creá el usuario.
+10. Copiá el UID de ese usuario.
+
+PASO 5 — INSTALAR LAS REGLAS PRIVADAS
+--------------------------------------
+1. Abrí el archivo firebase-rules.json de este paquete.
+2. Reemplazá TODAS las apariciones de:
+
+   REEMPLAZAR_POR_TU_UID
+
+   por el UID real del usuario creado.
+
+3. En Firebase → Realtime Database → Reglas / Rules.
+4. Pegá el contenido completo corregido.
+5. Tocá Publicar.
+
+Resultado de seguridad:
+- La pantalla pública puede LEER solamente la configuración que debe mostrar.
+- Solamente tu UID autenticado puede ESCRIBIR.
+- Borradores e historial solo pueden ser leídos por tu usuario.
+
+PASO 6 — AUTORIZAR GITHUB PAGES
+-------------------------------
+1. Firebase → Authentication → Settings / Configuración.
+2. Authorized domains / Dominios autorizados.
+3. Agregá:
+
+   mauricioezequielmora-dot.github.io
+
+PASO 7 — COMPLETAR firebase-config.js
+-------------------------------------
+1. Abrí firebase-config.js.
+2. Reemplazá cada texto que comienza con PEGAR_ por los valores que entregó
+   Firebase al registrar la aplicación web.
+3. No escribas tu contraseña en este archivo.
+4. Guardá.
+
+PASO 8 — SUBIR TODO A GITHUB
+----------------------------
+1. Descomprimí el ZIP.
+2. En GitHub: Add file → Upload files.
+3. Seleccioná TODO el contenido de la carpeta extraída.
+4. Incluí las carpetas control, audio e icons.
+5. No subas el ZIP cerrado.
+6. Commit sugerido:
+
+   Agregar panel remoto privado con Firebase
+
+7. Esperá la tilde verde en Actions.
+
+PASO 9 — PRIMERA PRUEBA
+-----------------------
+1. Abrí el panel:
+   https://mauricioezequielmora-dot.github.io/mundial-2026/control/
+2. Iniciá sesión con el usuario creado en Firebase.
+3. Tocá "Cargar lo publicado".
+4. Cambiá el partido destacado por un texto de prueba.
+5. Tocá "PUBLICAR EN EL VIVO".
+6. Mirá la señal en el Samsung. Debe cambiar sin recargar.
+7. Probá "Siguiente placa" y "Mostrar noticia".
+
+BOLETÍN MP3 REMOTO
+------------------
+- Generá el audio con texto a voz.
+- Recomendación: MP3 corto, 25 a 45 segundos.
+- Tamaño máximo admitido por este panel: 1,5 MB.
+- Desde /control/ elegí el archivo y tocá SUBIR BOLETÍN.
+- Después publicá la configuración con "Boletín automático activado".
+- El Samsung descarga el nuevo audio y lo guarda localmente.
+
+QUÉ PASA SI SE CORTA FIREBASE O INTERNET
+----------------------------------------
+- La señal conserva la última configuración válida guardada en el Samsung.
+- Los resultados de la API pueden fallar por separado.
+- Cuando Firebase vuelve, el panel remoto se reconecta y aplica la última
+  configuración publicada.
+- El indicador superior muestra el estado del control remoto.
+
+SEGURIDAD REAL
+--------------
+- La dirección /control/ puede ser conocida, pero sin usuario, contraseña y UID
+  autorizado no se puede modificar la señal.
+- No dejes Realtime Database en modo de prueba.
+- No publiques tu contraseña.
+- El objeto firebaseConfig no es una contraseña; las reglas son las que impiden
+  escrituras ajenas.

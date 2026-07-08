@@ -1,0 +1,10 @@
+CENTRAL MUNDIALISTA 2026 - Carrera a la Final v13
+
+Cambios sobre la versión anterior:
+- Se quitó el aviso visible "REMOTO SIN CONFIGURAR" del encabezado público.
+- Se quitó el texto técnico "Resultados solo si están confirmados por la API" de la cancha.
+- Se agregó movimiento continuo real en las pistas: césped/cinta en desplazamiento, líneas móviles, brillo de velocidad, obstáculos que circulan, pelota girando y corredores con movimiento permanente.
+- Se redujo el refresco completo de la carrera para evitar sensación de pantalla que se recarga todo el tiempo.
+- Se actualizó el cache del Service Worker a central-mundialista-v13-carrera-final-movimiento.
+
+No se cargaron partidos, horarios ni resultados nuevos a mano.

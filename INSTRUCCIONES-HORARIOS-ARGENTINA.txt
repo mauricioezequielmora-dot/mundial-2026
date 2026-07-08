@@ -1,0 +1,34 @@
+CORRECCIÓN DE HORARIOS · CAMINO A LA COPA
+
+Esta versión fija todos los horarios de la ronda de 32 en hora de Argentina (UTC-3), sin depender de la hora local de la sede ni de la zona horaria configurada en el navegador.
+
+HORARIOS ARGENTINA VERIFICADOS
+28/06 16:00 · Sudáfrica vs Canadá
+29/06 14:00 · Brasil vs Japón
+29/06 17:30 · Alemania vs Paraguay
+29/06 22:00 · Países Bajos vs Marruecos
+30/06 14:00 · Costa de Marfil vs Noruega
+30/06 18:00 · Francia vs Suecia
+30/06 22:00 · México vs Ecuador
+01/07 13:00 · Inglaterra vs RD Congo
+01/07 17:00 · Bélgica vs Senegal
+01/07 21:00 · Estados Unidos vs Bosnia y Herzegovina
+02/07 16:00 · España vs Austria
+02/07 20:00 · Portugal vs Croacia
+03/07 00:00 · Suiza vs Argelia
+03/07 15:00 · Australia vs Egipto
+03/07 19:00 · Argentina vs Cabo Verde
+03/07 22:30 · Colombia vs Ghana
+
+CAMBIOS TÉCNICOS
+- Fecha y hora guardadas directamente como hora argentina.
+- Conversión manual fija a UTC-3 para el contador.
+- El contador muestra horas y minutos separados con claridad.
+- Se cambió la versión de caché de la PWA.
+- index.html usa una dirección versionada de knockout.js para impedir que Chrome conserve el archivo anterior.
+
+DESPUÉS DE SUBIR
+1. Esperar la tilde verde en GitHub Actions.
+2. Cerrar completamente la PWA en el Samsung.
+3. Volver a abrirla.
+4. Si persiste la versión anterior, abrir la página en Chrome y recargar una vez.

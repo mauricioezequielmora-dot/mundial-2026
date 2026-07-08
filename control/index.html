@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e1a">
+  <title>Control privado · Central Mundialista</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <span class="eyebrow">PANEL REMOTO PRIVADO</span>
+      <h1>Central Mundialista</h1>
+    </div>
+    <a class="live-link" href="../" target="_blank" rel="noopener">Ver señal</a>
+  </header>
+
+  <main class="page">
+    <section id="setupNotice" class="notice danger hidden">
+      <strong>Firebase todavía no está configurado.</strong>
+      <span>Completá <code>firebase-config.js</code> y seguí <code>INSTRUCCIONES-PANEL-REMOTO.txt</code>.</span>
+    </section>
+
+    <section id="loginCard" class="card login-card">
+      <div class="card-head">
+        <div>
+          <span class="eyebrow">ACCESO</span>
+          <h2>Entrar al control</h2>
+        </div>
+        <span id="loginStatus" class="status">Sin iniciar sesión</span>
+      </div>
+      <form id="loginForm" class="form-grid single">
+        <label>Correo de administrador
+          <input id="loginEmail" type="email" autocomplete="username" required placeholder="tu-correo@ejemplo.com">
+        </label>
+        <label>Contraseña
+          <input id="loginPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="••••••••">
+        </label>
+        <button class="primary" type="submit">INICIAR SESIÓN</button>
+      </form>
+      <p class="help">La contraseña se envía directamente a Firebase Authentication. No queda escrita en GitHub.</p>
+    </section>
+
+    <section id="editor" class="hidden">
+      <section class="session-bar card">
+        <div>
+          <span class="eyebrow">CONECTADO</span>
+          <strong id="sessionEmail">—</strong>
+          <small>UID: <span id="sessionUid">—</span></small>
+        </div>
+        <div class="session-actions">
+          <button id="copyUid" type="button">Copiar UID</button>
+          <button id="logoutButton" type="button" class="ghost-danger">Cerrar sesión</button>
+        </div>
+      </section>
+
+      <section class="card live-state">
+        <div>
+          <span class="eyebrow">ESTADO DE LA SEÑAL</span>
+          <strong id="liveStateText">Esperando datos...</strong>
+          <small id="liveUpdatedAt">Sin publicaciones remotas</small>
+        </div>
+        <div class="dot-wrap"><span id="connectionDot" class="connection-dot"></span><span id="connectionText">Conectando</span></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <span class="eyebrow">CONTENIDO DEL DÍA</span>
+            <h2>Información principal</h2>
+          </div>
+          <button id="loadLive" type="button">Cargar lo publicado</button>
+        </div>
+        <div class="form-grid">
+          <label>Partido destacado
+            <input id="featuredMatch" type="text" maxlength="90" placeholder="Ej.: Argentina vs Cabo Verde · 19:00">
+          </label>
+          <label>Pregunta para el chat
+            <input id="dailyQuestion" type="text" maxlength="120" placeholder="Ej.: ¿Quién pasa a octavos?">
+          </label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <span class="eyebrow">RADAR</span>
+            <h2>Noticias verificadas</h2>
+          </div>
+          <span class="counter-note">Máximo 190 caracteres</span>
+        </div>
+        <p class="help">Escribí un resumen propio y agregá la fuente. No pegues artículos completos.</p>
+        <div id="newsEditors" class="news-list"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <span class="eyebrow">TENDENCIAS</span>
+            <h2>Lo más hablado</h2>
+          </div>
+        </div>
+        <div class="form-grid three">
+          <label>Tema 1<input id="trend0" type="text" maxlength="45"></label>
+          <label>Tema 2<input id="trend1" type="text" maxlength="45"></label>
+          <label>Tema 3<input id="trend2" type="text" maxlength="45"></label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <span class="eyebrow">SEÑAL AUTOMÁTICA</span>
+            <h2>Audio y rotación</h2>
+          </div>
+        </div>
+        <div class="form-grid">
+          <label class="check-row"><input id="musicEnabled" type="checkbox"> Música de fondo activada</label>
+          <label>Volumen de música <output id="musicVolumeOutput">10%</output>
+            <input id="musicVolume" type="range" min="0" max="30" step="1" value="10">
+          </label>
+          <label>URL opcional de otra música
+            <input id="musicUrl" type="url" maxlength="500" placeholder="https://.../musica.mp3">
+          </label>
+          <label class="check-row"><input id="bulletinEnabled" type="checkbox"> Boletín automático activado</label>
+          <label>Repetir boletín cada
+            <select id="bulletinInterval">
+              <option value="5">5 minutos</option>
+              <option value="8">8 minutos</option>
+              <option value="10">10 minutos</option>
+              <option value="15">15 minutos</option>
+              <option value="20">20 minutos</option>
+            </select>
+          </label>
+          <label>Volumen del boletín <output id="bulletinVolumeOutput">85%</output>
+            <input id="bulletinVolume" type="range" min="20" max="100" step="5" value="85">
+          </label>
+          <label>Cambiar placa cada
+            <select id="slideSeconds">
+              <option value="20">20 segundos</option>
+              <option value="25">25 segundos</option>
+              <option value="30">30 segundos</option>
+              <option value="40">40 segundos</option>
+            </select>
+          </label>
+          <label class="check-row"><input id="aliasEnabled" type="checkbox"> Mostrar alias labamdariver.nx</label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <span class="eyebrow">TEXTO A VOZ</span>
+            <h2>Boletín MP3 remoto</h2>
+          </div>
+          <span id="bulletinRemoteStatus" class="status">Sin archivo remoto</span>
+        </div>
+        <p class="help">Subí un MP3 corto. Límite recomendado: 1,5 MB. El teléfono del vivo lo descarga sin recargar la página.</p>
+        <div class="upload-row">
+          <input id="bulletinFile" type="file" accept="audio/mpeg,audio/mp3,audio/*">
+          <button id="uploadBulletin" type="button">SUBIR BOLETÍN</button>
+          <button id="disableBulletin" type="button" class="ghost-danger">Desactivar</button>
+        </div>
+        <progress id="bulletinProgress" max="100" value="0"></progress>
+      </section>
+
+      <section class="card preview-card">
+        <div class="card-head">
+          <div>
+            <span class="eyebrow">VISTA PREVIA</span>
+            <h2>Así se verá la placa principal</h2>
+          </div>
+          <button id="refreshPreview" type="button">Actualizar vista</button>
+        </div>
+        <div id="preview" class="preview">
+          <span>PARTIDO DESTACADO</span>
+          <strong>Completá el contenido</strong>
+          <small>La vista previa no modifica el vivo.</small>
+        </div>
+      </section>
+
+      <section class="card publish-card">
+        <div>
+          <span class="eyebrow">PUBLICACIÓN</span>
+          <h2>Aplicar sin cortar el vivo</h2>
+          <p class="help">Publicar cambia textos y opciones en el Samsung transmisor. No recarga la página ni muestra este panel.</p>
+        </div>
+        <div class="publish-actions">
+          <button id="saveDraft" type="button">Guardar borrador</button>
+          <button id="loadDraft" type="button">Recuperar borrador</button>
+          <button id="publishLive" class="primary" type="button">PUBLICAR EN EL VIVO</button>
+        </div>
+        <div id="actionMessage" class="action-message"></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <span class="eyebrow">ACCIONES INMEDIATAS</span>
+            <h2>Controlar la señal</h2>
+          </div>
+        </div>
+        <div class="command-grid">
+          <button data-command="next-slide" type="button">Siguiente placa</button>
+          <button data-command="show-section" data-value="featured" type="button">Mostrar partido</button>
+          <button data-command="show-section" data-value="news" type="button">Mostrar noticia</button>
+          <button data-command="show-section" data-value="trends" type="button">Mostrar tendencias</button>
+          <button data-command="show-section" data-value="chat" type="button">Mostrar pregunta</button>
+          <button data-command="play-bulletin" type="button">Reproducir boletín</button>
+          <button data-command="music-on" type="button">Encender música</button>
+          <button data-command="music-off" type="button">Silenciar música</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <span class="eyebrow">SEGURIDAD</span>
+            <h2>Últimas versiones</h2>
+          </div>
+          <button id="refreshHistory" type="button">Actualizar</button>
+        </div>
+        <div id="historyList" class="history-list"><span class="help">Todavía no hay versiones anteriores.</span></div>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="./control.js"></script>
+</body>
+</html>

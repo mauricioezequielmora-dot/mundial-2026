@@ -1,0 +1,29 @@
+{
+  "rules": {
+    "centralMundialista": {
+      "live": {
+        ".read": true,
+        ".write": "auth != null && auth.uid === 'REEMPLAZAR_POR_TU_UID'"
+      },
+      "drafts": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid && auth.uid === 'REEMPLAZAR_POR_TU_UID'",
+          ".write": "auth != null && auth.uid === $uid && auth.uid === 'REEMPLAZAR_POR_TU_UID'"
+        }
+      },
+      "history": {
+        ".read": "auth != null && auth.uid === 'REEMPLAZAR_POR_TU_UID'",
+        ".write": "auth != null && auth.uid === 'REEMPLAZAR_POR_TU_UID'",
+        ".indexOn": [
+          "clientUpdatedAt"
+        ]
+      },
+      "$other": {
+        ".read": false,
+        ".write": false
+      }
+    },
+    ".read": false,
+    ".write": false
+  }
+}

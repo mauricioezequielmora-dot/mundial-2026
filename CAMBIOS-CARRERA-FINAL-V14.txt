@@ -1,0 +1,27 @@
+CENTRAL MUNDIALISTA 2026 — CAMBIOS V14
+
+Base usada:
+- mundial-2026-carrera-final-v13-movimiento.zip
+
+Cambios de esta versión:
+- Se quitó la fila superior de etapas CUARTOS / SEMIS / FINAL / COPA dentro de la carrera.
+- El indicador superior de la carrera ya no muestra la fase; solo muestra cuántos equipos siguen en carrera.
+- Se eliminaron los textos laterales de eventos y horarios dentro de cada carril.
+- Se reemplazó el token de bandera por un corredor genérico animado.
+- La bandera queda solo como identificación del equipo en el nombre del carril.
+- Los obstáculos ahora activan efectos visuales del corredor:
+  - valla: salto;
+  - cono: esquive lateral;
+  - barro: resbalón;
+  - pelota: pique/drible;
+  - viento: empuje.
+- Se mantuvo la vista aérea y el formato horizontal 2/3 + 1/3.
+- Se actualizó el Service Worker a central-mundialista-v14-corredores-obstaculos.
+
+Pruebas realizadas:
+- node --check en todos los JavaScript principales y del panel /control/.
+- Revisión de referencias de index.html.
+- Revisión de textos visibles solicitados para que no aparezcan en la carrera.
+
+No probado:
+- Samsung A04s físico.
