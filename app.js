@@ -13,6 +13,23 @@ const ARG_TZ = "America/Argentina/Buenos_Aires";
 const ARG_TEAM_ID = "37";
 const SUPPORT_ALIAS = "labamdariver.nx";
 
+// Banderas locales para los equipos que siguen en competencia al 10/07/2026.
+// Evita que una URL defectuosa de la API repita una bandera equivocada en pantalla.
+const LOCAL_FLAG_CODES = Object.freeze({
+  france: "fr", morocco: "ma", spain: "es", belgium: "be",
+  norway: "no", england: "eng", argentina: "ar", switzerland: "ch"
+});
+
+// Horarios oficiales ya convertidos a Argentina (UTC-3), fase actual.
+// Si la API no ofrece una zona horaria inequívoca, la pantalla no debe inventar
+// un contador basado en la hora local del teléfono.
+const VERIFIED_ARGENTINA_KICKOFFS = Object.freeze({
+  "france|morocco": "2026-07-09T20:00:00.000Z",
+  "belgium|spain": "2026-07-10T19:00:00.000Z",
+  "england|norway": "2026-07-11T21:00:00.000Z",
+  "argentina|switzerland": "2026-07-12T01:00:00.000Z"
+});
+
 let refreshTimer = null;
 let retryAttempt = 0;
 let initializedScores = false;
@@ -39,6 +56,44 @@ let state = {
 
 function safeArray(value) {
   return Array.isArray(value) ? value : [];
+}
+
+function localFlagForTeam(team) {
+  const key = String(team?.name_en || team?.name || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+  const code = LOCAL_FLAG_CODES[key];
+  return code ? `./flags/${code}.png` : (team?.flag || "");
+}
+
+function normalizedTeamName(team) {
+  return String(team?.name_en || team?.name || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function verifiedArgentinaKickoff(game) {
+  const home = normalizedTeamName(state.teams[game?.home_team_id]);
+  const away = normalizedTeamName(state.teams[game?.away_team_id]);
+  const key = [home, away].sort().join("|");
+  const timestamp = VERIFIED_ARGENTINA_KICKOFFS[key];
+  return timestamp ? new Date(timestamp) : null;
+}
+
+function formatArgentinaKickoff(date) {
+  return new Intl.DateTimeFormat("es-AR", {
+    timeZone: ARG_TZ,
+    weekday: "short",
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).format(date).replace(".", "").toUpperCase() + " HS ARG";
 }
 
 function endpointHasData(name, payload) {
@@ -405,7 +460,7 @@ function renderLiveMatch(live, header, body, card) {
 
       <div class="live-scoreboard">
         <div class="live-team ${live.home_team_id === ARG_TEAM_ID ? "arg-highlight" : ""}">
-          <img src="${home?.flag}" onerror="this.style.display='none'">
+          <img src="${localFlagForTeam(home)}" onerror="this.style.display='none'">
           <div class="lt-name">${home?.name_en || "?"}</div>
         </div>
         <div class="live-score">
@@ -414,7 +469,7 @@ function renderLiveMatch(live, header, body, card) {
           <span class="ls-away">${live.away_score_num}</span>
         </div>
         <div class="live-team ${live.away_team_id === ARG_TEAM_ID ? "arg-highlight" : ""}">
-          <img src="${away?.flag}" onerror="this.style.display='none'">
+          <img src="${localFlagForTeam(away)}" onerror="this.style.display='none'">
           <div class="lt-name">${away?.name_en || "?"}</div>
         </div>
       </div>
@@ -468,7 +523,10 @@ function renderNextMatch(next, header, body, card) {
     <span>${next.group ? "GRUPO " + next.group : (next.type || "PRÓXIMO").toUpperCase()}</span>
     <span class="live-min">PRÓXIMO</span>
   `;
-  const matchDate = next.local_date || (next.date ? formatDateLong(next.date) : "Fecha por confirmar");
+  const verifiedKickoff = verifiedArgentinaKickoff(next);
+  const matchDate = verifiedKickoff
+    ? formatArgentinaKickoff(verifiedKickoff)
+    : "HORARIO DE ARGENTINA NO DISPONIBLE";
   const stadiumInfo = stadium ? `
     <div class="match-stadium">
       📍 ${stadium.name_en} · ${stadium.city_en} · ${stadium.capacity.toLocaleString()} personas
@@ -488,7 +546,7 @@ function renderNextMatch(next, header, body, card) {
         <span class="stage">${matchDate}</span>
       </div>
       ${stadiumInfo}
-      <div class="countdown" id="nextCountdown">${next.date ? renderCountdown(next.date) : "QUEDATE QUE EMPIEZA PRONTO"}</div>
+      <div class="countdown" id="nextCountdown">${verifiedKickoff ? renderCountdown(verifiedKickoff) : "REVISÁ EL CALENDARIO OFICIAL"}</div>
     </div>
   `;
   card.classList.remove("live-border");
@@ -498,7 +556,7 @@ function renderTeam(team, extra) {
   if (!team) return `<div class="team"><div class="team-name">?</div></div>`;
   return `
     <div class="team ${extra}">
-      <img src="${team.flag}" alt="${team.name_en}" onerror="this.style.display='none'">
+    <img src="${localFlagForTeam(team)}" alt="${team.name_en}" onerror="this.style.display='none'">
       <div class="team-name">${team.name_en}</div>
     </div>
   `;
@@ -568,11 +626,11 @@ function renderRecent() {
       <div class="recent-item">
         <div class="r-team home">
           <span>${home?.name_en || "?"}</span>
-          <img src="${home?.flag || ''}" onerror="this.style.display='none'">
+          <img src="${localFlagForTeam(home)}" onerror="this.style.display='none'">
         </div>
         <div class="r-score">${g.home_score_num} - ${g.away_score_num}</div>
         <div class="r-team">
-          <img src="${away?.flag || ''}" onerror="this.style.display='none'">
+          <img src="${localFlagForTeam(away)}" onerror="this.style.display='none'">
           <span>${away?.name_en || "?"}</span>
         </div>
       </div>
@@ -819,7 +877,8 @@ async function init() {
     renderMatch();
     const countdown = document.getElementById("nextCountdown");
     const next = getNextMatch();
-    if (countdown && next?.date) countdown.textContent = renderCountdown(next.date);
+    const verifiedKickoff = verifiedArgentinaKickoff(next);
+    if (countdown && verifiedKickoff) countdown.textContent = renderCountdown(verifiedKickoff);
   }, 5000);
   setInterval(watchdogTick, 30000);
 

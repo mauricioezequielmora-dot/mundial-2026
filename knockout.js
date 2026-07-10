@@ -1,8 +1,8 @@
 /* ============================================================
-   CAMINO A LA COPA · RONDA DE 32
-   Reemplaza la tabla de grupos por 16 cruces rotativos.
-   - No inventa favoritos ni antecedentes.
-   - Usa el estado de la API para marcador y datos de grupos.
+   CAMINO A LA COPA · CUARTOS DE FINAL
+   Reemplaza la tabla de grupos por los cruces vigentes verificados.
+   - No inventa favoritos, resultados ni clasificados pendientes.
+   - Usa el estado de la API para marcador y estado del partido.
    - Horarios fijos expresados en hora argentina (UTC-3).
    ============================================================ */
 
@@ -15,208 +15,70 @@
 
   const FIXTURES = [
     {
-      id: 73,
-      home: "Sudáfrica",
-      away: "Canadá",
-      homeAliases: ["South Africa", "Sudáfrica"],
-      awayAliases: ["Canada", "Canadá"],
-      dateArgentina: "2026-06-28",
-      timeArgentina: "16:00",
-      venue: "Inglewood, California",
-      next: "Países Bajos o Marruecos"
-    },
-    {
-      id: 76,
-      home: "Brasil",
-      away: "Japón",
-      homeAliases: ["Brazil", "Brasil"],
-      awayAliases: ["Japan", "Japón"],
-      dateArgentina: "2026-06-29",
-      timeArgentina: "14:00",
-      venue: "Houston",
-      next: "Costa de Marfil o Noruega"
-    },
-    {
-      id: 74,
-      home: "Alemania",
-      away: "Paraguay",
-      homeAliases: ["Germany", "Alemania"],
-      awayAliases: ["Paraguay"],
-      dateArgentina: "2026-06-29",
-      timeArgentina: "17:30",
-      venue: "Foxborough, Massachusetts",
-      next: "Francia o Suecia"
-    },
-    {
-      id: 75,
-      home: "Países Bajos",
-      away: "Marruecos",
-      homeAliases: ["Netherlands", "Países Bajos", "Holland"],
-      awayAliases: ["Morocco", "Marruecos"],
-      dateArgentina: "2026-06-29",
-      timeArgentina: "22:00",
-      venue: "Guadalupe, México",
-      next: "Sudáfrica o Canadá"
-    },
-    {
-      id: 78,
-      home: "Costa de Marfil",
-      away: "Noruega",
-      homeAliases: ["Ivory Coast", "Côte d'Ivoire", "Cote d'Ivoire", "Costa de Marfil"],
-      awayAliases: ["Norway", "Noruega"],
-      dateArgentina: "2026-06-30",
-      timeArgentina: "14:00",
-      venue: "Arlington, Texas",
-      next: "Brasil o Japón"
-    },
-    {
-      id: 77,
+      id: 97,
       home: "Francia",
-      away: "Suecia",
+      away: "Marruecos",
       homeAliases: ["France", "Francia"],
-      awayAliases: ["Sweden", "Suecia"],
-      dateArgentina: "2026-06-30",
-      timeArgentina: "18:00",
-      venue: "East Rutherford, Nueva Jersey",
-      next: "Alemania o Paraguay"
-    },
-    {
-      id: 79,
-      home: "México",
-      away: "Ecuador",
-      homeAliases: ["Mexico", "México"],
-      awayAliases: ["Ecuador"],
-      dateArgentina: "2026-06-30",
-      timeArgentina: "22:00",
-      venue: "Ciudad de México",
-      next: "Inglaterra o RD Congo"
-    },
-    {
-      id: 80,
-      home: "Inglaterra",
-      away: "RD Congo",
-      homeAliases: ["England", "Inglaterra"],
-      awayAliases: ["DR Congo", "Congo DR", "RD Congo", "Democratic Republic of the Congo"],
-      dateArgentina: "2026-07-01",
-      timeArgentina: "13:00",
-      venue: "Atlanta",
-      next: "México o Ecuador"
-    },
-    {
-      id: 82,
-      home: "Bélgica",
-      away: "Senegal",
-      homeAliases: ["Belgium", "Bélgica"],
-      awayAliases: ["Senegal"],
-      dateArgentina: "2026-07-01",
+      awayAliases: ["Morocco", "Marruecos"],
+      dateArgentina: "2026-07-09",
       timeArgentina: "17:00",
-      venue: "Seattle",
-      next: "Estados Unidos o Bosnia y Herzegovina"
+      venue: "Boston, Massachusetts",
+      next: "España o Bélgica"
     },
     {
-      id: 81,
-      home: "Estados Unidos",
-      away: "Bosnia y Herzegovina",
-      homeAliases: ["USA", "United States", "United States of America", "Estados Unidos"],
-      awayAliases: ["Bosnia and Herzegovina", "Bosnia-Herzegovina", "Bosnia y Herzegovina"],
-      dateArgentina: "2026-07-01",
-      timeArgentina: "21:00",
-      venue: "Santa Clara, California",
-      next: "Bélgica o Senegal"
-    },
-    {
-      id: 84,
+      id: 98,
       home: "España",
-      away: "Austria",
+      away: "Bélgica",
       homeAliases: ["Spain", "España"],
-      awayAliases: ["Austria"],
-      dateArgentina: "2026-07-02",
+      awayAliases: ["Belgium", "Bélgica"],
+      dateArgentina: "2026-07-10",
       timeArgentina: "16:00",
-      venue: "Inglewood, California",
-      next: "Portugal o Croacia"
+      venue: "Los Ángeles, California",
+      next: "Francia"
     },
     {
-      id: 83,
-      home: "Portugal",
-      away: "Croacia",
-      homeAliases: ["Portugal"],
-      awayAliases: ["Croatia", "Croacia"],
-      dateArgentina: "2026-07-02",
-      timeArgentina: "20:00",
-      venue: "Toronto",
-      next: "España o Austria"
-    },
-    {
-      id: 85,
-      home: "Suiza",
-      away: "Argelia",
-      homeAliases: ["Switzerland", "Suiza"],
-      awayAliases: ["Algeria", "Argelia"],
-      dateArgentina: "2026-07-03",
-      timeArgentina: "00:00",
-      venue: "Vancouver",
-      next: "Colombia o Ghana"
-    },
-    {
-      id: 88,
-      home: "Australia",
-      away: "Egipto",
-      homeAliases: ["Australia"],
-      awayAliases: ["Egypt", "Egipto"],
-      dateArgentina: "2026-07-03",
-      timeArgentina: "15:00",
-      venue: "Arlington, Texas",
-      next: "Argentina o Cabo Verde"
-    },
-    {
-      id: 86,
-      home: "Argentina",
-      away: "Cabo Verde",
-      homeAliases: ["Argentina"],
-      awayAliases: ["Cape Verde", "Cabo Verde", "Cabo Verde Islands"],
-      dateArgentina: "2026-07-03",
-      timeArgentina: "19:00",
+      id: 99,
+      home: "Noruega",
+      away: "Inglaterra",
+      homeAliases: ["Norway", "Noruega"],
+      awayAliases: ["England", "Inglaterra"],
+      dateArgentina: "2026-07-11",
+      timeArgentina: "18:00",
       venue: "Miami Gardens, Florida",
-      next: "Australia o Egipto",
-      argentina: true
+      next: "Ganador de Argentina vs Suiza"
     },
     {
-      id: 87,
-      home: "Colombia",
-      away: "Ghana",
-      homeAliases: ["Colombia"],
-      awayAliases: ["Ghana"],
-      dateArgentina: "2026-07-03",
-      timeArgentina: "22:30",
-      venue: "Kansas City",
-      next: "Suiza o Argelia"
+      id: 100,
+      home: "Argentina",
+      away: "Suiza",
+      homeAliases: ["Argentina"],
+      awayAliases: ["Switzerland", "Suiza"],
+      dateArgentina: "2026-07-11",
+      timeArgentina: "22:00",
+      venue: "Kansas City, Missouri",
+      next: "Ganador de Noruega vs Inglaterra",
+      argentina: true
     }
   ];
 
   // Las banderas de Camino a la Copa son recursos locales y fijos.
   // No se toman desde la API porque algunas respuestas pueden devolver una URL incorrecta.
   const FLAG_ASSET = {
-    "Sudáfrica": "za", "Canadá": "ca", "Brasil": "br", "Japón": "jp",
-    "Alemania": "de", "Paraguay": "py", "Países Bajos": "nl", "Marruecos": "ma",
-    "Costa de Marfil": "ci", "Noruega": "no", "Francia": "fr", "Suecia": "se",
-    "México": "mx", "Ecuador": "ec", "Inglaterra": "eng", "RD Congo": "cd",
-    "Bélgica": "be", "Senegal": "sn", "Estados Unidos": "us", "Bosnia y Herzegovina": "ba",
-    "España": "es", "Austria": "at", "Portugal": "pt", "Croacia": "hr",
-    "Suiza": "ch", "Argelia": "dz", "Australia": "au", "Egipto": "eg",
-    "Argentina": "ar", "Cabo Verde": "cv", "Colombia": "co", "Ghana": "gh"
+    "Francia": "fr", "Marruecos": "ma", "España": "es", "Bélgica": "be",
+    "Noruega": "no", "Inglaterra": "eng", "Argentina": "ar", "Suiza": "ch"
   };
 
   const FLAG_FALLBACK = {
-    "Sudáfrica": "🇿🇦", "Canadá": "🇨🇦", "Brasil": "🇧🇷", "Japón": "🇯🇵",
-    "Alemania": "🇩🇪", "Paraguay": "🇵🇾", "Países Bajos": "🇳🇱", "Marruecos": "🇲🇦",
-    "Costa de Marfil": "🇨🇮", "Noruega": "🇳🇴", "Francia": "🇫🇷", "Suecia": "🇸🇪",
-    "México": "🇲🇽", "Ecuador": "🇪🇨", "Inglaterra": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "RD Congo": "🇨🇩",
-    "Bélgica": "🇧🇪", "Senegal": "🇸🇳", "Estados Unidos": "🇺🇸", "Bosnia y Herzegovina": "🇧🇦",
-    "España": "🇪🇸", "Austria": "🇦🇹", "Portugal": "🇵🇹", "Croacia": "🇭🇷",
-    "Suiza": "🇨🇭", "Argelia": "🇩🇿", "Australia": "🇦🇺", "Egipto": "🇪🇬",
-    "Argentina": "🇦🇷", "Cabo Verde": "🇨🇻", "Colombia": "🇨🇴", "Ghana": "🇬🇭"
+    "Francia": "🇫🇷", "Marruecos": "🇲🇦", "España": "🇪🇸", "Bélgica": "🇧🇪",
+    "Noruega": "🇳🇴", "Inglaterra": "🏴", "Argentina": "🇦🇷", "Suiza": "🇨🇭"
   };
 
+  /*
+   * Los cruces y horarios se verificaron el 10/07/2026 con FIFA. Conversión:
+   * Boston 16:00 EDT → 17:00 Argentina; Los Ángeles 12:00 PDT → 16:00;
+   * Miami 17:00 EDT → 18:00; Kansas City 20:00 CDT → 22:00.
+   */
+  
   function normalize(value) {
     return String(value || "")
       .normalize("NFD")
@@ -319,7 +181,7 @@
 
   function teamRecordLine(team, displayName) {
     const record = findTeamRecord(team);
-    if (!record) return `${displayName}: clasificado a la ronda de 32`;
+    if (!record) return `${displayName}: datos de fase de grupos no disponibles`;
     const gf = Number(record.gf || 0);
     const ga = Number(record.ga || 0);
     return `${displayName}: ${record.pts} pts · ${gf}-${ga} goles · Grupo ${record.groupName}`;
@@ -396,12 +258,12 @@
     const status = matchStatus(fixture, apiMatch, homeTeam, awayTeam);
     const isFeatured = fixture.argentina || apiMatch?.isLive;
 
-    nav.textContent = `DIECISEISAVOS · ${fixtureIndex + 1}/${FIXTURES.length}`;
+    nav.textContent = `CUARTOS DE FINAL · ${fixtureIndex + 1}/${FIXTURES.length}`;
     list.classList.add("knockout-list");
     list.innerHTML = `
       <article class="ko-card ${status.className} ${isFeatured ? "featured" : ""}">
         <div class="ko-topline">
-          <span class="ko-stage">RONDA DE 32</span>
+          <span class="ko-stage">CUARTOS DE FINAL</span>
           <span class="ko-status">${status.label}</span>
         </div>
 
@@ -420,13 +282,13 @@
         <div class="ko-venue">📍 ${fixture.venue} · HORA ARGENTINA</div>
         ${status.className === "upcoming" ? `<div class="ko-countdown">${countdownText(fixture)}</div>` : ""}
 
-        <div class="ko-data-title">DATOS DE FASE DE GRUPOS</div>
+        <div class="ko-data-title">REGISTRO DE FASE DE GRUPOS</div>
         <div class="ko-data-line">${teamRecordLine(homeTeam, fixture.home)}</div>
         <div class="ko-data-line">${teamRecordLine(awayTeam, fixture.away)}</div>
 
         <div class="ko-next">
           <span>SI AVANZA</span>
-          <strong>Jugará en octavos ante ${fixture.next}</strong>
+          <strong>Si avanza: ${fixture.next}</strong>
         </div>
       </article>
     `;

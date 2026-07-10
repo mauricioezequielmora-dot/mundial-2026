@@ -51,6 +51,7 @@
       </div>
       <div class="header-right">
         <div class="audio-chip" id="audioChip" aria-label="Estado del audio">♫ FONDO</div>
+        <div class="remote-chip connecting" id="remoteStatus" aria-label="Estado del control remoto">☁ CONECTANDO</div>
         <div class="clock" id="clock">--:--</div>
         <div class="live-badge" id="liveStatus">
           <span class="live-dot"></span>
@@ -59,26 +60,9 @@
       </div>
     </header>
 
-    <main class="final-layout">
-      <section class="race-zone" aria-label="Carrera visual a la final">
-        <div class="race-card">
-          <div class="race-topline">
-            <div>
-              <span class="race-kicker">CARRERA A LA FINAL</span>
-              <h1>Camino a la Copa</h1>
-            </div>
-            <div class="race-status-pill" id="raceStatusPill">Esperando datos</div>
-          </div>
-
-
-          <div class="final-race" id="finalRace">
-            <div class="race-loading">Cargando clasificados confirmados...</div>
-          </div>
-        </div>
-      </section>
-
-      <aside class="side-feed" aria-label="Información en vivo y placas automáticas">
-        <div class="match-card compact-live-card" id="matchCard">
+    <main class="main-grid">
+      <section class="col-left">
+        <div class="match-card" id="matchCard">
           <div class="match-card-header" id="matchCardHeader">
             <span id="matchStage">CARGANDO...</span>
           </div>
@@ -87,7 +71,16 @@
           </div>
         </div>
 
-        <div class="broadcast-card vertical-feed-card" id="broadcastCard">
+        <div class="recent-card">
+          <div class="card-title">RESULTADOS RECIENTES</div>
+          <div class="recent-list" id="recentList">
+            <div class="loading-small">Cargando...</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="col-center">
+        <div class="broadcast-card" id="broadcastCard">
           <div class="card-title broadcast-card-title">
             <span id="broadcastSection">RADAR MUNDIAL</span>
             <span class="broadcast-counter" id="broadcastCounter">1/1</span>
@@ -97,21 +90,25 @@
           </div>
           <div class="broadcast-progress"><span id="broadcastProgress"></span></div>
         </div>
-      </aside>
 
-      <!-- Compatibilidad: app.js y knockout.js siguen actualizando estos nodos sin mostrarlos. -->
-      <div class="legacy-hidden" aria-hidden="true">
-        <div class="recent-card">
-          <div class="card-title">RESULTADOS RECIENTES</div>
-          <div class="recent-list" id="recentList"><div class="loading-small">Cargando...</div></div>
+        <!-- Compatibilidad con la versión anterior: app.js actualiza estos nodos sin mostrarlos. -->
+        <div class="legacy-hidden" aria-hidden="true">
+          <div id="headlineContent"></div>
+          <div id="triviaContent"></div>
         </div>
+      </section>
+
+      <section class="col-right">
         <div class="standings-card">
-          <div class="card-title">CAMINO A LA COPA <span class="group-nav" id="groupNav"></span></div>
-          <div class="standings-list" id="standingsList"><div class="loading-small">Cargando tabla...</div></div>
+          <div class="card-title">
+            CAMINO A LA COPA
+            <span class="group-nav" id="groupNav"></span>
+          </div>
+          <div class="standings-list" id="standingsList">
+            <div class="loading-small">Cargando tabla...</div>
+          </div>
         </div>
-        <div id="headlineContent"></div>
-        <div id="triviaContent"></div>
-      </div>
+      </section>
     </main>
 
     <footer class="ticker-bar">
@@ -249,8 +246,7 @@
   <script src="./preguntas.js"></script>
   <script src="./curiosidades.js"></script>
   <script src="./app.js"></script>
-  <script src="./knockout.js?v=20260628-horarios-arg-1"></script>
-  <script src="./final-race.js?v=20260708-race-3"></script>
+  <script src="./knockout.js?v=20260710-cuartos-final-1"></script>
   <script src="./studio.js"></script>
   <script type="module" src="./remote-control.js"></script>
   <script src="./pwa.js"></script>
